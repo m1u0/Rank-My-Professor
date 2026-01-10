@@ -17,6 +17,9 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit 
     <div style={{ width: "45%" }}>
       <h3>{prof.name}</h3>
       <p style={{ color: "#666" }}>{prof.department}</p>
+      <p style={{ fontSize: "14px", fontWeight: "bold", color: "#1976d2", marginBottom: 12 }}>
+        Rating: {prof.rating.toFixed(1)} ⭐
+      </p>
       
       <div style={{ marginTop: 12 }}>
         <h4 style={{ fontSize: "13px", marginBottom: 8 }}>Student Reviews:</h4>

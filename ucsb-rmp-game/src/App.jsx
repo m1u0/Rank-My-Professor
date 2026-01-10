@@ -99,6 +99,14 @@ export default function App() {
     setRightProf(randomProf());
   };
 
+  const goBackToMenu = () => {
+    setScore(0);
+    setLost(false);
+    setMode(null);
+    setLeftProf(randomProf());
+    setRightProf(randomProf());
+  };
+
   if (!started) {
     return (
       <StartScreen
@@ -134,7 +142,7 @@ export default function App() {
         />
       )}
 
-      {lost && <GameOverModal score={score} onRestart={restartGame} />}
+      {lost && <GameOverModal mode={mode} score={score} leftProf={leftProf} rightProf={rightProf} onRestart={restartGame} onGoBackToMenu={goBackToMenu} />}
       {showConfirm && (
         <ConfirmationModal
           message="Leave this game and go back to mode selection?"
