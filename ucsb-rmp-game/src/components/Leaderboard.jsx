@@ -10,15 +10,14 @@
 import React from "react";
 
 const MODE_OPTIONS = [
-  { value: "guess", label: "Arcade: Guess the Rating", emoji: "🎮" },
-  { value: "guess10", label: "Best Out of 10", emoji: "🏆" },
-  { value: "higherlower", label: "Higher or Lower", emoji: "⬆️" }
+  { value: "guess", label: "Arcade: Guess the Rating" },
+  { value: "guess10", label: "Best Out of 10"},
+  { value: "higherlower", label: "Higher or Lower" }
 ];
 
 const DIFFICULTY_OPTIONS = [
-  { value: "easy", label: "Easy", emoji: "🌿" },
-  { value: "normal", label: "Normal", emoji: "⚖️" },
-  { value: "hard", label: "Hard", emoji: "🔥" }
+  { value: "normal", label: "Normal"},
+  { value: "hard", label: "Hard"}
 ];
 
 const buildLeaderboardState = () =>
@@ -101,14 +100,14 @@ export default function Leaderboard({ playerName, onBack }) {
     };
   }, [normalizedName, selectedMode]);
 
-  const LeaderboardTable = ({ difficulty, title, emoji }) => {
+  const LeaderboardTable = ({ difficulty, title }) => {
     const sorted = [...(leaderboards[difficulty] || [])].sort((a, b) => b.score - a.score).slice(0, 10);
     const playerRank = meta[difficulty]?.playerRank;
 
     return (
       <div style={{ flex: 1, minWidth: 280 }}>
         <h3 style={{ marginBottom: 20, color: "var(--primary-blue)", fontSize: "18px", fontWeight: 700 }}>
-          {emoji} {title}
+          {title}
         </h3>
         {loading ? (
           <p style={{ color: "var(--muted-2)", textAlign: "center", padding: "40px 20px" }}>Loading leaderboard...</p>
@@ -229,7 +228,7 @@ export default function Leaderboard({ playerName, onBack }) {
           <div>
             <p style={{ margin: "0 0 6px 0", fontSize: "12px", color: "var(--muted-2)" }}>Showing leaderboards for</p>
             <h2 style={{ margin: 0, fontSize: "22px", fontWeight: 700, color: "var(--black)" }}>
-              {selectedModeMeta.emoji} {selectedModeMeta.label}
+               {selectedModeMeta.label}
             </h2>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -260,7 +259,7 @@ export default function Leaderboard({ playerName, onBack }) {
             >
               {MODE_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
-                  {option.emoji} {option.label}
+                   {option.label}
                 </option>
               ))}
             </select>
@@ -280,7 +279,7 @@ export default function Leaderboard({ playerName, onBack }) {
               <LeaderboardTable
                 difficulty={difficulty.value}
                 title={difficulty.label}
-                emoji={difficulty.emoji}
+               
               />
             </div>
           ))}

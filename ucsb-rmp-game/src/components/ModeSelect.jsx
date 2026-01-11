@@ -92,7 +92,6 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
           </h3>
           <div style={{ display: "flex", justifyContent: "center", gap: 12 }}>
             {[
-              { label: "Easy", value: "easy" },
               { label: "Normal", value: "normal" },
               { label: "Hard", value: "hard" }
             ].map((diff) => (
@@ -293,7 +292,8 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
               fontSize: "16px",
               fontWeight: 600,
               cursor: "pointer",
-              transition: "all 0.2s"
+              transition: "all 0.2s",
+              marginTop: "25px"
             }}
             onMouseEnter={(e) => {
               e.target.style.backgroundColor = "var(--dark-blue)";

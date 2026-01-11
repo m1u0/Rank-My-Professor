@@ -9,7 +9,14 @@
 
 import React, { useState, useMemo, useEffect, useRef } from "react";
 
-export default function GuessMode({ prof, onGuess, onExit, score, mode, difficulty }) {
+export default function GuessMode({
+  prof,
+  onGuess,
+  onExit,
+  score,
+  mode,
+  difficulty,
+}) {
   const [guess, setGuess] = useState(3.0);
   const [submitted, setSubmitted] = useState(false);
   const [fillPercentage, setFillPercentage] = useState(0);
@@ -33,7 +40,7 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
       let currentFill = 0;
       const targetFill = (prof.rating / 5) * 100;
       const interval = setInterval(() => {
-        currentFill += (targetFill / 27); // 50 steps for smooth animation
+        currentFill += targetFill / 27; // 50 steps for smooth animation
         if (currentFill >= targetFill) {
           currentFill = targetFill;
           clearInterval(interval);
@@ -49,7 +56,7 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
     if (submitted && submittedProfIdRef.current === prof.id) {
       const difference = Math.abs(parseFloat(guess) - prof.rating);
       const correct = difference <= 0.5;
-      
+
       if (correct) {
         setIsCorrect(true);
         setIsIncorrect(false);
@@ -79,24 +86,25 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
 
   const playSuccessSound = () => {
     // Create a simple success sound using Web Audio API
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const audioContext = new (window.AudioContext ||
+      window.webkitAudioContext)();
     const now = audioContext.currentTime;
-    
+
     // Create a cheerful ascending arpeggio
     const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
     notes.forEach((freq, index) => {
       const osc = audioContext.createOscillator();
       const gain = audioContext.createGain();
-      
+
       osc.connect(gain);
       gain.connect(audioContext.destination);
-      
+
       osc.frequency.value = freq;
-      osc.type = 'sine';
-      
+      osc.type = "sine";
+
       gain.gain.setValueAtTime(0.3, now + index * 0.1);
       gain.gain.exponentialRampToValueAtTime(0.01, now + index * 0.1 + 0.2);
-      
+
       osc.start(now + index * 0.1);
       osc.stop(now + index * 0.1 + 0.2);
     });
@@ -104,24 +112,25 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
 
   const playErrorSound = () => {
     // Create an error sound using Web Audio API
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const audioContext = new (window.AudioContext ||
+      window.webkitAudioContext)();
     const now = audioContext.currentTime;
-    
+
     // Create a descending buzzer
     const notes = [349.23, 293.66]; // F4, D4
     notes.forEach((freq, index) => {
       const osc = audioContext.createOscillator();
       const gain = audioContext.createGain();
-      
+
       osc.connect(gain);
       gain.connect(audioContext.destination);
-      
+
       osc.frequency.value = freq;
-      osc.type = 'square';
-      
+      osc.type = "square";
+
       gain.gain.setValueAtTime(0.2, now + index * 0.15);
       gain.gain.exponentialRampToValueAtTime(0.01, now + index * 0.15 + 0.25);
-      
+
       osc.start(now + index * 0.15);
       osc.stop(now + index * 0.15 + 0.25);
     });
@@ -129,23 +138,23 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
 
   const shakeElement = () => {
     if (!shakeElementRef.current) return;
-    
+
     const element = shakeElementRef.current;
     let shakes = 0;
     const maxShakes = 6;
-    
+
     const shake = () => {
       const offset = (shakes % 2) * 10 - 5;
       element.style.transform = `translateX(${offset}px)`;
       shakes++;
-      
+
       if (shakes < maxShakes) {
         setTimeout(shake, 50);
       } else {
-        element.style.transform = 'translateX(0)';
+        element.style.transform = "translateX(0)";
       }
     };
-    
+
     shake();
   };
 
@@ -153,9 +162,9 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     const confetti = [];
-    
+
     // Create confetti pieces
     for (let i = 0; i < 50; i++) {
       confetti.push({
@@ -166,13 +175,15 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
         rotation: Math.random() * Math.PI * 2,
         rotationSpeed: (Math.random() - 0.5) * 0.2,
         size: Math.random() * 8 + 4,
-        color: ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A'][Math.floor(Math.random() * 5)]
+        color: ["#FFD700", "#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A"][
+          Math.floor(Math.random() * 5)
+        ],
       });
     }
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       let hasConfetti = false;
       confetti.forEach((piece) => {
         if (piece.y < canvas.height) {
@@ -181,21 +192,26 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
           piece.y += piece.vy;
           piece.vy += 0.1; // gravity
           piece.rotation += piece.rotationSpeed;
-          
+
           ctx.save();
           ctx.translate(piece.x, piece.y);
           ctx.rotate(piece.rotation);
           ctx.fillStyle = piece.color;
-          ctx.fillRect(-piece.size / 2, -piece.size / 2, piece.size, piece.size);
+          ctx.fillRect(
+            -piece.size / 2,
+            -piece.size / 2,
+            piece.size,
+            piece.size
+          );
           ctx.restore();
         }
       });
-      
+
       if (hasConfetti) {
         requestAnimationFrame(animate);
       }
     };
-    
+
     animate();
   };
 
@@ -204,18 +220,26 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
     submittedProfIdRef.current = prof.id;
     const difference = Math.abs(parseFloat(guess) - prof.rating);
     const isCorrectAnswer = difference <= 0.5;
-    
+
     // For correct answers: 1500ms delay
     // For incorrect answers: 1500ms for message + 500ms delay = 2000ms total
     const delay = isCorrectAnswer ? 1500 : 2000;
-    
+
     setTimeout(() => {
       onGuess(parseFloat(guess));
     }, delay);
   };
 
   return (
-    <div style={{ background: "var(--light-gray)", minHeight: "100vh", paddingBottom: 40, display: "flex", flexDirection: "column" }}>
+    <div
+      style={{
+        background: "var(--light-gray)",
+        minHeight: "100vh",
+        paddingBottom: 40,
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       {/* Confetti Canvas */}
       <canvas
         ref={canvasRef}
@@ -226,29 +250,31 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
           width: "100%",
           height: "100%",
           pointerEvents: "none",
-          zIndex: 999
+          zIndex: 999,
         }}
-        width={typeof window !== 'undefined' ? window.innerWidth : 0}
-        height={typeof window !== 'undefined' ? window.innerHeight : 0}
+        width={typeof window !== "undefined" ? window.innerWidth : 0}
+        height={typeof window !== "undefined" ? window.innerHeight : 0}
       />
 
       {/* Success Message Overlay */}
       {isCorrect && (
-        <div style={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          background: "var(--green)",
-          color: "var(--white)",
-          padding: "30px 60px",
-          borderRadius: 12,
-          fontSize: "32px",
-          fontWeight: 700,
-          zIndex: 1001,
-          animation: "scaleIn 0.3s ease-out",
-          boxShadow: "0 10px 40px rgba(0, 0, 0, 0.3)"
-        }}>
+        <div
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            background: "var(--green)",
+            color: "var(--white)",
+            padding: "30px 60px",
+            borderRadius: 12,
+            fontSize: "32px",
+            fontWeight: 700,
+            zIndex: 1001,
+            animation: "scaleIn 0.3s ease-out",
+            boxShadow: "0 10px 40px rgba(0, 0, 0, 0.3)",
+          }}
+        >
           ✨ Correct! ✨
           <style>{`
             @keyframes scaleIn {
@@ -267,21 +293,23 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
 
       {/* Incorrect Message Overlay */}
       {isIncorrect && (
-        <div style={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          background: "var(--red)",
-          color: "var(--white)",
-          padding: "30px 60px",
-          borderRadius: 12,
-          fontSize: "32px",
-          fontWeight: 700,
-          zIndex: 1001,
-          animation: "scaleIn 0.3s ease-out",
-          boxShadow: "0 10px 40px rgba(0, 0, 0, 0.3)"
-        }}>
+        <div
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            background: "var(--red)",
+            color: "var(--white)",
+            padding: "30px 60px",
+            borderRadius: 12,
+            fontSize: "32px",
+            fontWeight: 700,
+            zIndex: 1001,
+            animation: "scaleIn 0.3s ease-out",
+            boxShadow: "0 10px 40px rgba(0, 0, 0, 0.3)",
+          }}
+        >
           ✗ Incorrect! ✗
           <style>{`
             @keyframes scaleIn {
@@ -299,21 +327,23 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
       )}
 
       {/* Header */}
-      <div style={{
-        background: "var(--black)",
-        color: "var(--white)",
-        padding: "10px 30px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        width: "100%",
-        boxSizing: "border-box",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1000
-      }}>
+      <div
+        style={{
+          background: "var(--black)",
+          color: "var(--white)",
+          padding: "10px 30px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          width: "100%",
+          boxSizing: "border-box",
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1000,
+        }}
+      >
         <button
           onClick={onExit}
           style={{
@@ -324,216 +354,466 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
             cursor: "pointer",
             padding: 0,
             display: "flex",
-            alignItems: "center"
+            alignItems: "center",
           }}
         >
           ← Back
         </button>
-        <h2 style={{ margin: 0, fontSize: "24px", fontWeight: 700, flex: 1, textAlign: "center" }}>Guess the Rating</h2>
+        <h2
+          style={{
+            margin: 0,
+            fontSize: "24px",
+            fontWeight: 700,
+            flex: 1,
+            textAlign: "center",
+          }}
+        >
+          Guess the Rating
+        </h2>
         <div style={{ width: 60 }} />
       </div>
 
       {/* Content */}
-      <div ref={shakeElementRef} style={{ flex: 1, maxWidth: 1200, margin: "0 auto", padding: "30px", paddingTop: 80, width: "100%", boxSizing: "border-box", transition: "transform 0.05s linear" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 30 }}>
+      <div
+        ref={shakeElementRef}
+        style={{
+          flex: 1,
+          maxWidth: 1200,
+          margin: "0 auto",
+          padding: "30px",
+          paddingTop: 80,
+          width: "100%",
+          boxSizing: "border-box",
+          transition: "transform 0.05s linear",
+        }}
+      >
+        <div
+          style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 30 }}
+        >
           {/* Score - Left Aligned */}
-          <div style={{
-            display: "flex",
-            flexDirection: "column"
-          }}>
-            <div style={{
-              fontSize: "16px",
-              fontWeight: 600,
-              color: "var(--black)",
-              marginBottom: "20px"
-            }}>
-              Score: <span style={{ color: "var(--primary-blue)", fontSize: "18px" }}>{score}</span>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <div
+              style={{
+                fontSize: "16px",
+                fontWeight: 600,
+                color: "var(--black)",
+                marginBottom: "20px",
+              }}
+            >
+              Score:{" "}
+              <span style={{ color: "var(--primary-blue)", fontSize: "18px" }}>
+                {score}
+              </span>
             </div>
 
             {/* Professor Info & Reviews */}
-            <div style={{
-              background: "var(--white)",
-              borderRadius: 0,
-              padding: 24
-            }}>
-            <h3 style={{ margin: "0 0 8px 0", fontSize: "24px", fontWeight: 700, color: "var(--black)" }}>
-              {prof.name}
-            </h3>
-            <p style={{ margin: "0 0 16px 0", fontSize: "14px", color: "var(--black)" }}>
-              Department: {prof.department}
-            </p>
-            
-           
+            <div
+              style={{
+                background: "var(--white)",
+                borderRadius: 0,
+                padding: 24,
+              }}
+            >
+              <h3
+                style={{
+                  margin: "0 0 8px 0",
+                  fontSize: "24px",
+                  fontWeight: 700,
+                  color: "var(--black)",
+                }}
+              >
+                {prof.name}
+              </h3>
+              <p
+                style={{
+                  margin: "0 0 16px 0",
+                  fontSize: "14px",
+                  color: "var(--black)",
+                }}
+              >
+                Department: {prof.department}
+              </p>
 
-            <h4 style={{ margin: "0 0 16px 0", fontSize: "14px", fontWeight: 600, color: "var(--black)" }}>
-              Student Reviews
-            </h4>
-            <div style={{ maxHeight: "450px", overflowY: "auto", paddingRight: 8 }}>
-              {comments.map((comment, i) => {
-                const getQualityColor = (rating) => {
-                  if (rating >= 4.5) return "var(--green)";
-                  if (rating >= 3) return "var(--yellow)";
-                  return "var(--red)";
-                };
-                const getDifficultyColor = (rating) => {
-                  if (rating >= 4) return "var(--red)";
-                  if (rating >= 2) return "var(--yellow)";
-                  return "var(--green)";
-                };
+              <h4
+                style={{
+                  margin: "0 0 16px 0",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  color: "var(--black)",
+                }}
+              >
+                Student Reviews
+              </h4>
+              <div
+                style={{
+                  maxHeight: "450px",
+                  overflowY: "auto",
+                  paddingRight: 8,
+                }}
+              >
+                {comments.map((comment, i) => {
+                  const getQualityColor = (rating) => {
+                    if (rating >= 4.5) return "var(--green)";
+                    if (rating >= 3) return "var(--yellow)";
+                    return "var(--red)";
+                  };
+                  const getDifficultyColor = (rating) => {
+                    if (rating >= 4) return "var(--red)";
+                    if (rating >= 2) return "var(--yellow)";
+                    return "var(--green)";
+                  };
 
-                // Format date with ordinal suffix
-                const formatDate = (dateString) => {
-                  if (!dateString) return "";
-                  const date = new Date(dateString);
-                  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-                  const day = date.getDate();
-                  let suffix = "th";
-                  if (day === 1 || day === 21 || day === 31) suffix = "st";
-                  else if (day === 2 || day === 22) suffix = "nd";
-                  else if (day === 3 || day === 23) suffix = "rd";
-                  return `${months[date.getMonth()]} ${day}${suffix}, ${date.getFullYear()}`;
-                };
+                  // Format date with ordinal suffix
+                  const formatDate = (dateString) => {
+                    if (!dateString) return "";
+                    const date = new Date(dateString);
+                    const months = [
+                      "Jan",
+                      "Feb",
+                      "Mar",
+                      "Apr",
+                      "May",
+                      "Jun",
+                      "Jul",
+                      "Aug",
+                      "Sep",
+                      "Oct",
+                      "Nov",
+                      "Dec",
+                    ];
+                    const day = date.getDate();
+                    let suffix = "th";
+                    if (day === 1 || day === 21 || day === 31) suffix = "st";
+                    else if (day === 2 || day === 22) suffix = "nd";
+                    else if (day === 3 || day === 23) suffix = "rd";
+                    return `${
+                      months[date.getMonth()]
+                    } ${day}${suffix}, ${date.getFullYear()}`;
+                  };
 
-                const formattedDate = formatDate(comment.date);
+                  const formattedDate = formatDate(comment.date);
 
-                return (
-                  <div
-                    key={i}
-                    style={{
-                      marginBottom: 20,
-                      padding: "20px",
-                      borderRadius: 0,
-                      background: "var(--light-gray)",
-                      border: "1px solid var(--surface-border)",
-                      display: "grid",
-                      gridTemplateColumns: "80px 1fr",
-                      gap: "20px",
-                      gridTemplateRows: "auto auto"
-                    }}
-                  >
-                    {/* Left: Quality & Difficulty boxes */}
-                    <div style={{ gridRow: "1 / 3", display: "flex", flexDirection: "column", gap: 12, alignItems: "center" }}>
-                      {/* Quality */}
-                      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-                        <div style={{ fontSize: "11px", fontWeight: 600, color: "var(--black)" }}>QUALITY</div>
+                  return (
+                    <div
+                      key={i}
+                      style={{
+                        marginBottom: 20,
+                        padding: "20px",
+                        borderRadius: 0,
+                        background: "var(--light-gray)",
+                        border: "1px solid var(--surface-border)",
+                        display: "grid",
+                        gridTemplateColumns: "80px 1fr",
+                        gap: "20px",
+                        gridTemplateRows: "auto auto",
+                      }}
+                    >
+                      {/* Left: Quality & Difficulty boxes */}
+                      <div
+                        style={{
+                          gridRow: "1 / 3",
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 12,
+                          alignItems: "center",
+                        }}
+                      >
+                        {/* Quality */}
                         <div
                           style={{
-                            background: difficulty === "hard" ? "var(--dark-gray)" : getQualityColor(comment.clarityRating || 3),
-                            padding: "8px",
-                            borderRadius: 0,
-                            textAlign: "center",
-                            width: 80,
-                            aspectRatio: 1,
                             display: "flex",
                             flexDirection: "column",
-                            justifyContent: "center",
-                            alignItems: "center"
+                            alignItems: "center",
+                            gap: 4,
                           }}
                         >
-                          <div style={{ fontSize: "36px", fontWeight: 700, color: "var(--black)" }}>
-                            {difficulty === "hard" ? "??" : (comment.clarityRating?.toFixed(1) || "N/A")}
+                          <div
+                            style={{
+                              fontSize: "11px",
+                              fontWeight: 600,
+                              color: "var(--black)",
+                            }}
+                          >
+                            QUALITY
+                          </div>
+                          <div
+                            style={{
+                              background:
+                                difficulty === "hard"
+                                  ? "var(--dark-gray)"
+                                  : getQualityColor(comment.clarityRating || 3),
+                              padding: "8px",
+                              borderRadius: 0,
+                              textAlign: "center",
+                              width: 80,
+                              aspectRatio: 1,
+                              display: "flex",
+                              flexDirection: "column",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <div
+                              style={{
+                                fontSize: "36px",
+                                fontWeight: 700,
+                                color: "var(--black)",
+                              }}
+                            >
+                              {difficulty === "hard"
+                                ? "??"
+                                : comment.clarityRating?.toFixed(1) || "N/A"}
+                            </div>
+                          </div>
+                        </div>
+                        {/* Difficulty */}
+                        <div
+                          style={{
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            gap: 4,
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontSize: "11px",
+                              fontWeight: 600,
+                              color: "var(--black)",
+                            }}
+                          >
+                            DIFFICULTY
+                          </div>
+                          <div
+                            style={{
+                              background: "var(--dark-gray)",
+                              padding: "8px",
+                              borderRadius: 0,
+                              textAlign: "center",
+                              width: 80,
+                              aspectRatio: 1,
+                              display: "flex",
+                              flexDirection: "column",
+                              justifyContent: "center",
+                              alignItems: "center",
+                            }}
+                          >
+                            <div
+                              style={{
+                                fontSize: "36px",
+                                fontWeight: 700,
+                                color: "var(--black)",
+                              }}
+                            >
+                              {difficulty === "hard"
+                                ? "??"
+                                : comment.difficultyRating?.toFixed(1) || "N/A"}
+                            </div>
                           </div>
                         </div>
                       </div>
-                      {/* Difficulty */}
-                      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-                        <div style={{ fontSize: "11px", fontWeight: 600, color: "var(--black)" }}>DIFFICULTY</div>
+
+                      {/* Right top: Class name and metadata */}
+                      <div style={{ gridColumn: 2, gridRow: 1 }}>
                         <div
                           style={{
-                            background: "var(--dark-gray)",
-                            padding: "8px",
-                            borderRadius: 0,
-                            textAlign: "center",
-                            width: 80,
-                            aspectRatio: 1,
                             display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "center",
-                            alignItems: "center"
+                            justifyContent: "space-between",
+                            alignItems: "baseline",
+                            marginBottom: 6,
                           }}
                         >
-                          <div style={{ fontSize: "36px", fontWeight: 700, color: "var(--black)" }}>
-                            {difficulty === "hard" ? "??" : (comment.difficultyRating?.toFixed(1) || "N/A")}
+                          <div
+                            style={{
+                              fontSize: "16px",
+                              fontWeight: 700,
+                              color: "var(--black)",
+                            }}
+                          >
+                            {comment.class?.toUpperCase()}
+                          </div>
+                          <div
+                            style={{
+                              fontSize: "12px",
+                              fontWeight: 600,
+                              color: "var(--muted)",
+                              fontFamily:
+                                '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                            }}
+                          >
+                            {formattedDate}
                           </div>
                         </div>
-                      </div>
-                    </div>
-
-                    {/* Right top: Class name and metadata */}
-                    <div style={{ gridColumn: 2, gridRow: 1 }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
-                        <div style={{ fontSize: "16px", fontWeight: 700, color: "var(--black)" }}>
-                          {comment.class?.toUpperCase()}
-                        </div>
-                        <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--muted)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{formattedDate}</div>
-                      </div>
-                      <div style={{ fontSize: "13px", color: "var(--muted)", lineHeight: "1.5" }}>
-                        For Credit: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{difficulty === "hard" ? "??" : "Yes"}</span> &nbsp; Attendance: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{difficulty === "hard" ? "??" : "Not Mandatory"}</span> &nbsp; Grade: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{difficulty === "hard" ? "??" : (comment.grade || "N/A")}</span> &nbsp; Textbook: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{difficulty === "hard" ? "??" : (comment.textbook || "N/A")}</span>
-                      </div>
-                    </div>
-
-                    {/* Right middle: Comment text */}
-                    <div style={{ gridColumn: 2, gridRow: 2, marginTop: -10 }}>
-                      <p style={{ margin: "0 0 12px 0", fontSize: "14px", color: "var(--black)", lineHeight: "1.6" }}>
-                        {comment.comment}
-                      </p>
-                    </div>
-
-                    {/* Bottom: Tags row (placeholder for now) */}
-                    <div style={{ gridColumn: "1 / -1", display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap" }}>
-                      {comment.tags && comment.tags.map((tag, idx) => (
-                        <span
-                          key={idx}
+                        <div
                           style={{
-                            fontSize: "11px",
-                            fontWeight: 600,
+                            fontSize: "13px",
+                            color: "var(--muted)",
+                            lineHeight: "1.5",
+                          }}
+                        >
+                          For Credit:{" "}
+                          <span
+                            style={{
+                              fontWeight: 600,
+                              color: "var(--black)",
+                              fontFamily:
+                                '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                            }}
+                          >
+                            {difficulty === "hard" ? "??" : "Yes"}
+                          </span>{" "}
+                          &nbsp; Attendance:{" "}
+                          <span
+                            style={{
+                              fontWeight: 600,
+                              color: "var(--black)",
+                              fontFamily:
+                                '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                            }}
+                          >
+                            {difficulty === "hard" ? "??" : "Not Mandatory"}
+                          </span>{" "}
+                          &nbsp; Grade:{" "}
+                          <span
+                            style={{
+                              fontWeight: 600,
+                              color: "var(--black)",
+                              fontFamily:
+                                '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                            }}
+                          >
+                            {difficulty === "hard"
+                              ? "??"
+                              : comment.grade || "N/A"}
+                          </span>{" "}
+                          &nbsp; Textbook:{" "}
+                          <span
+                            style={{
+                              fontWeight: 600,
+                              color: "var(--black)",
+                              fontFamily:
+                                '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                            }}
+                          >
+                            {difficulty === "hard"
+                              ? "??"
+                              : comment.textbook || "N/A"}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Right middle: Comment text */}
+                      <div
+                        style={{ gridColumn: 2, gridRow: 2, marginTop: -10 }}
+                      >
+                        <p
+                          style={{
+                            margin: "0 0 12px 0",
+                            fontSize: "14px",
                             color: "var(--black)",
-                            background: "var(--light-gray)",
-                            padding: "6px 10px",
-                            borderRadius: 4
+                            lineHeight: "1.6",
                           }}
                         >
-                          {tag}
-                        </span>
-                      ))}
+                          {comment.comment}
+                        </p>
+                      </div>
+
+                      {/* Bottom: Tags row (placeholder for now) */}
+                      <div
+                        style={{
+                          gridColumn: "1 / -1",
+                          display: "flex",
+                          gap: 8,
+                          marginTop: 8,
+                          flexWrap: "wrap",
+                        }}
+                      >
+                        {comment.tags &&
+                          comment.tags.map((tag, idx) => (
+                            <span
+                              key={idx}
+                              style={{
+                                fontSize: "11px",
+                                fontWeight: 600,
+                                color: "var(--black)",
+                                background: "var(--light-gray)",
+                                padding: "6px 10px",
+                                borderRadius: 4,
+                              }}
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
-        </div>
 
           {/* Guess Input */}
-          <div style={{
-            background: "var(--white)",
-            borderRadius: 0,
-            padding: 24,
-            display: "flex",
-            flexDirection: "column"
-          }}>
-            <h3 style={{ margin: "0 0 24px 0", fontSize: "24px", fontWeight: 700, color: "var(--black)" }}>
+          <div
+            style={{
+              background: "var(--white)",
+              borderRadius: 0,
+              padding: 24,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <h3
+              style={{
+                margin: "0 0 24px 0",
+                fontSize: "24px",
+                fontWeight: 700,
+                color: "var(--black)",
+              }}
+            >
               What's the rating?
             </h3>
 
             <div style={{ flex: 1 }}>
-              <div style={{
-                background: "var(--light-gray)",
-                padding: 24,
-                borderRadius: 0,
-                textAlign: "center",
-                marginBottom: 24
-              }}>
-                <p style={{ margin: "0 0 8px 0", fontSize: "12px", color: "var(--black)" }}>Your Guess</p>
-                <p style={{
-                  margin: 0,
-                  fontSize: "48px",
-                  fontWeight: 700,
-                  color: "var(--primary-blue)"
-                }}>
+              <div
+                style={{
+                  background: "var(--light-gray)",
+                  padding: 24,
+                  borderRadius: 0,
+                  textAlign: "center",
+                  marginBottom: 24,
+                }}
+              >
+                <p
+                  style={{
+                    margin: "0 0 8px 0",
+                    fontSize: "12px",
+                    color: "var(--black)",
+                  }}
+                >
+                  Your Guess
+                </p>
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: "48px",
+                    fontWeight: 700,
+                    color: "var(--primary-blue)",
+                  }}
+                >
                   {parseFloat(guess).toFixed(1)}
                 </p>
-                <p style={{ margin: "8px 0 0 0", fontSize: "18px", color: "var(--yellow)" }}>
+                <p
+                  style={{
+                    margin: "8px 0 0 0",
+                    fontSize: "18px",
+                    color: "var(--yellow)",
+                  }}
+                >
                   {"⭐".repeat(Math.floor(parseFloat(guess)))}
                 </p>
               </div>
@@ -541,21 +821,33 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
               {/* Animated green bar showing correct rating */}
               {submitted && (
                 <div style={{ marginBottom: 24 }}>
-                  <div style={{
-                    background: "var(--light-gray)",
-                    padding: 24,
-                    borderRadius: 0,
-                    marginBottom: 24
-                  }}>
-                    <p style={{ margin: "0 0 12px 0", fontSize: "12px", color: "var(--black)" }}>Correct Rating</p>
-                    <div style={{
-                      position: "relative",
-                      width: "100%",
-                      height: 40,
+                  <div
+                    style={{
                       background: "var(--light-gray)",
-                      borderRadius: 4,
-                      overflow: "hidden"
-                    }}>
+                      padding: 24,
+                      borderRadius: 0,
+                      marginBottom: 24,
+                    }}
+                  >
+                    <p
+                      style={{
+                        margin: "0 0 12px 0",
+                        fontSize: "12px",
+                        color: "var(--black)",
+                      }}
+                    >
+                      Correct Rating
+                    </p>
+                    <div
+                      style={{
+                        position: "relative",
+                        width: "100%",
+                        height: 40,
+                        background: "var(--light-gray)",
+                        borderRadius: 4,
+                        overflow: "hidden",
+                      }}
+                    >
                       <div
                         style={{
                           position: "absolute",
@@ -571,7 +863,7 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
                           paddingRight: 12,
                           fontSize: "18px",
                           fontWeight: 700,
-                          color: "var(--white)"
+                          color: "var(--white)",
                         }}
                       >
                         {fillPercentage > 10 && `${prof.rating.toFixed(1)}`}
@@ -581,13 +873,15 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
                 </div>
               )}
 
-              <label style={{
-                display: "block",
-                marginBottom: 16,
-                fontSize: "14px",
-                fontWeight: 600,
-                color: "var(--black)"
-              }}>
+              <label
+                style={{
+                  display: "block",
+                  marginBottom: 16,
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  color: "var(--black)",
+                }}
+              >
                 Adjust Rating
               </label>
 
@@ -607,7 +901,7 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
                   borderRadius: 3,
                   WebkitAppearance: "none",
                   appearance: "none",
-                  opacity: submitted ? 0.5 : 1
+                  opacity: submitted ? 0.5 : 1,
                 }}
               />
               <style>{`
@@ -631,14 +925,16 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
                 }
               `}</style>
 
-              <div style={{
-                display: "flex",
-                justifyContent: "space-between",
-                fontSize: "12px",
-                color: "var(--black)",
-                marginTop: 8,
-                marginBottom: 24
-              }}>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  fontSize: "12px",
+                  color: "var(--black)",
+                  marginTop: 8,
+                  marginBottom: 24,
+                }}
+              >
                 <span>1</span>
                 <span>5</span>
               </div>
@@ -658,7 +954,7 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
                   cursor: submitted ? "not-allowed" : "pointer",
                   fontSize: "16px",
                   fontWeight: 600,
-                  transition: "all 0.2s"
+                  transition: "all 0.2s",
                 }}
                 onMouseEnter={(e) => {
                   e.target.style.backgroundColor = "var(--dark-blue)";
@@ -678,10 +974,3 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode, difficul
     </div>
   );
 }
-
-
-
-
-
-
-

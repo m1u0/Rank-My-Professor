@@ -65,7 +65,7 @@ export default function App() {
   const submitScoreToLeaderboard = async (finalScore) => {
     const trimmedName = playerName.trim();
     const modeKey = mode === "guess" ? "guess" : mode === "guess10" ? "guess10" : mode === "higherlower" ? "higherlower" : null;
-    const difficultyKey = ["easy", "normal", "hard"].includes(difficulty) ? difficulty : null;
+    const difficultyKey = [ "normal", "hard"].includes(difficulty) ? difficulty : null;
 
     if (!trimmedName || !modeKey || !difficultyKey || !Number.isInteger(finalScore)) {
       return;

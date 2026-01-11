@@ -9,7 +9,14 @@
 
 import React, { useState, useRef, useEffect } from "react";
 
-export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit, score, difficulty }) {
+export default function HigherLowerMode({
+  leftProf,
+  rightProf,
+  onChoose,
+  onExit,
+  score,
+  difficulty,
+}) {
   const [showCorrect, setShowCorrect] = useState(false);
   const [showIncorrect, setShowIncorrect] = useState(false);
   const canvasRef = useRef(null);
@@ -27,24 +34,25 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
 
   const playSuccessSound = () => {
     // Create a simple success sound using Web Audio API
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const audioContext = new (window.AudioContext ||
+      window.webkitAudioContext)();
     const now = audioContext.currentTime;
-    
+
     // Create a cheerful ascending arpeggio
     const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
     notes.forEach((freq, index) => {
       const osc = audioContext.createOscillator();
       const gain = audioContext.createGain();
-      
+
       osc.connect(gain);
       gain.connect(audioContext.destination);
-      
+
       osc.frequency.value = freq;
-      osc.type = 'sine';
-      
+      osc.type = "sine";
+
       gain.gain.setValueAtTime(0.3, now + index * 0.1);
       gain.gain.exponentialRampToValueAtTime(0.01, now + index * 0.1 + 0.2);
-      
+
       osc.start(now + index * 0.1);
       osc.stop(now + index * 0.1 + 0.2);
     });
@@ -52,24 +60,25 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
 
   const playErrorSound = () => {
     // Create an error sound using Web Audio API
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const audioContext = new (window.AudioContext ||
+      window.webkitAudioContext)();
     const now = audioContext.currentTime;
-    
+
     // Create a descending buzzer
     const notes = [349.23, 293.66]; // F4, D4
     notes.forEach((freq, index) => {
       const osc = audioContext.createOscillator();
       const gain = audioContext.createGain();
-      
+
       osc.connect(gain);
       gain.connect(audioContext.destination);
-      
+
       osc.frequency.value = freq;
-      osc.type = 'square';
-      
+      osc.type = "square";
+
       gain.gain.setValueAtTime(0.2, now + index * 0.15);
       gain.gain.exponentialRampToValueAtTime(0.01, now + index * 0.15 + 0.25);
-      
+
       osc.start(now + index * 0.15);
       osc.stop(now + index * 0.15 + 0.25);
     });
@@ -77,23 +86,23 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
 
   const shakeElement = () => {
     if (!shakeElementRef.current) return;
-    
+
     const element = shakeElementRef.current;
     let shakes = 0;
     const maxShakes = 6;
-    
+
     const shake = () => {
       const offset = (shakes % 2) * 10 - 5;
       element.style.transform = `translateX(${offset}px)`;
       shakes++;
-      
+
       if (shakes < maxShakes) {
         setTimeout(shake, 50);
       } else {
-        element.style.transform = 'translateX(0)';
+        element.style.transform = "translateX(0)";
       }
     };
-    
+
     shake();
   };
 
@@ -101,9 +110,9 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     const confetti = [];
-    
+
     // Create confetti pieces
     for (let i = 0; i < 50; i++) {
       confetti.push({
@@ -114,13 +123,15 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
         rotation: Math.random() * Math.PI * 2,
         rotationSpeed: (Math.random() - 0.5) * 0.2,
         size: Math.random() * 8 + 4,
-        color: ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A'][Math.floor(Math.random() * 5)]
+        color: ["#FFD700", "#FF6B6B", "#4ECDC4", "#45B7D1", "#FFA07A"][
+          Math.floor(Math.random() * 5)
+        ],
       });
     }
 
     const animate = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
+
       let hasConfetti = false;
       confetti.forEach((piece) => {
         if (piece.y < canvas.height) {
@@ -129,21 +140,26 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
           piece.y += piece.vy;
           piece.vy += 0.1; // gravity
           piece.rotation += piece.rotationSpeed;
-          
+
           ctx.save();
           ctx.translate(piece.x, piece.y);
           ctx.rotate(piece.rotation);
           ctx.fillStyle = piece.color;
-          ctx.fillRect(-piece.size / 2, -piece.size / 2, piece.size, piece.size);
+          ctx.fillRect(
+            -piece.size / 2,
+            -piece.size / 2,
+            piece.size,
+            piece.size
+          );
           ctx.restore();
         }
       });
-      
+
       if (hasConfetti) {
         requestAnimationFrame(animate);
       }
     };
-    
+
     animate();
   };
 
@@ -180,35 +196,74 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
   const rightComments = getRandomComments(rightProf);
 
   const ProfessorCard = ({ prof, comments, difficulty }) => (
-      <div style={{ flex: 1 }}>
-      <div style={{
-        background: "var(--white)",
-        borderRadius: 0,
-        padding: 24,
-        height: "100%",
-        display: "flex",
-        flexDirection: "column"
-      }}>
-        <h3 style={{ margin: "0 0 8px 0", fontSize: "20px", fontWeight: 700, color: "var(--black)" }}>
+    <div style={{ flex: 1 }}>
+      <div
+        style={{
+          background: "var(--white)",
+          borderRadius: 0,
+          padding: 24,
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <h3
+          style={{
+            margin: "0 0 8px 0",
+            fontSize: "20px",
+            fontWeight: 700,
+            color: "var(--black)",
+          }}
+        >
           {prof.name}
         </h3>
-        <p style={{ margin: "0 0 16px 0", fontSize: "13px", color: "var(--black)" }}>
+        <p
+          style={{
+            margin: "0 0 16px 0",
+            fontSize: "13px",
+            color: "var(--black)",
+          }}
+        >
           {prof.department}
         </p>
 
-        <div style={{
-          background: "var(--light-gray)",
-          padding: 12,
-          borderRadius: 0,
-          marginBottom: 16
-        }}>
-          <p style={{ margin: "0 0 4px 0", fontSize: "12px", color: "var(--black)" }}>Rating</p>
-          <p style={{ margin: 0, fontSize: "24px", fontWeight: 700, color: "var(--primary-blue)" }}>
+        <div
+          style={{
+            background: "var(--light-gray)",
+            padding: 12,
+            borderRadius: 0,
+            marginBottom: 16,
+          }}
+        >
+          <p
+            style={{
+              margin: "0 0 4px 0",
+              fontSize: "12px",
+              color: "var(--black)",
+            }}
+          >
+            Rating
+          </p>
+          <p
+            style={{
+              margin: 0,
+              fontSize: "24px",
+              fontWeight: 700,
+              color: "var(--primary-blue)",
+            }}
+          >
             {prof.rating.toFixed(1)} ⭐
           </p>
         </div>
 
-        <h4 style={{ margin: "0 0 12px 0", fontSize: "13px", fontWeight: 600, color: "var(--muted)" }}>
+        <h4
+          style={{
+            margin: "0 0 12px 0",
+            fontSize: "13px",
+            fontWeight: 600,
+            color: "var(--muted)",
+          }}
+        >
           Recent Reviews:
         </h4>
 
@@ -230,13 +285,28 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
               const formatDate = (dateString) => {
                 if (!dateString) return "";
                 const date = new Date(dateString);
-                const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                const months = [
+                  "Jan",
+                  "Feb",
+                  "Mar",
+                  "Apr",
+                  "May",
+                  "Jun",
+                  "Jul",
+                  "Aug",
+                  "Sep",
+                  "Oct",
+                  "Nov",
+                  "Dec",
+                ];
                 const day = date.getDate();
                 let suffix = "th";
                 if (day === 1 || day === 21 || day === 31) suffix = "st";
                 else if (day === 2 || day === 22) suffix = "nd";
                 else if (day === 3 || day === 23) suffix = "rd";
-                return `${months[date.getMonth()]} ${day}${suffix}, ${date.getFullYear()}`;
+                return `${
+                  months[date.getMonth()]
+                } ${day}${suffix}, ${date.getFullYear()}`;
               };
 
               const formattedDate = formatDate(comment.date);
@@ -253,17 +323,43 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
                     display: "grid",
                     gridTemplateColumns: "70px 1fr",
                     gap: "16px",
-                    gridTemplateRows: "auto auto"
+                    gridTemplateRows: "auto auto",
                   }}
                 >
                   {/* Left: Quality & Difficulty boxes */}
-                  <div style={{ gridRow: "1 / 3", display: "flex", flexDirection: "column", gap: 10, alignItems: "center" }}>
+                  <div
+                    style={{
+                      gridRow: "1 / 3",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 10,
+                      alignItems: "center",
+                    }}
+                  >
                     {/* Quality */}
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-                      <div style={{ fontSize: "10px", fontWeight: 600, color: "var(--black)" }}>QUALITY</div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: 3,
+                      }}
+                    >
                       <div
                         style={{
-                          background: difficulty === "hard" ? "var(--dark-gray)" : getQualityColor(comment.clarityRating || 3),
+                          fontSize: "10px",
+                          fontWeight: 600,
+                          color: "var(--black)",
+                        }}
+                      >
+                        QUALITY
+                      </div>
+                      <div
+                        style={{
+                          background:
+                            difficulty === "hard"
+                              ? "var(--dark-gray)"
+                              : getQualityColor(comment.clarityRating || 3),
                           padding: "6px",
                           borderRadius: 0,
                           textAlign: "center",
@@ -272,17 +368,40 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
                           display: "flex",
                           flexDirection: "column",
                           justifyContent: "center",
-                          alignItems: "center"
+                          alignItems: "center",
                         }}
                       >
-                        <div style={{ fontSize: "32px", fontWeight: 700, color: "var(--black)" }}>
-                          {difficulty === "hard" ? "??" : (comment.clarityRating?.toFixed(1) || "N/A")}
+                        <div
+                          style={{
+                            fontSize: "32px",
+                            fontWeight: 700,
+                            color: "var(--black)",
+                          }}
+                        >
+                          {difficulty === "hard"
+                            ? "??"
+                            : comment.clarityRating?.toFixed(1) || "N/A"}
                         </div>
                       </div>
                     </div>
                     {/* Difficulty */}
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-                      <div style={{ fontSize: "10px", fontWeight: 600, color: "var(--black)" }}>DIFFICULTY</div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: 3,
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: "10px",
+                          fontWeight: 600,
+                          color: "var(--black)",
+                        }}
+                      >
+                        DIFFICULTY
+                      </div>
                       <div
                         style={{
                           background: "var(--dark-gray)",
@@ -294,11 +413,19 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
                           display: "flex",
                           flexDirection: "column",
                           justifyContent: "center",
-                          alignItems: "center"
+                          alignItems: "center",
                         }}
                       >
-                        <div style={{ fontSize: "32px", fontWeight: 700, color: "var(--black)" }}>
-                          {difficulty === "hard" ? "??" : (comment.difficultyRating?.toFixed(1) || "N/A")}
+                        <div
+                          style={{
+                            fontSize: "32px",
+                            fontWeight: 700,
+                            color: "var(--black)",
+                          }}
+                        >
+                          {difficulty === "hard"
+                            ? "??"
+                            : comment.difficultyRating?.toFixed(1) || "N/A"}
                         </div>
                       </div>
                     </div>
@@ -306,22 +433,100 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
 
                   {/* Right top: Class name and metadata */}
                   <div style={{ gridColumn: 2, gridRow: 1 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
-                      <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--black)" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "baseline",
+                        marginBottom: 4,
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: 700,
+                          color: "var(--black)",
+                        }}
+                      >
                         {comment.class?.toUpperCase()}
                       </div>
-                      <div style={{ fontSize: "11px", fontWeight: 600, color: "var(--muted)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{formattedDate}</div>
+                      <div
+                        style={{
+                          fontSize: "11px",
+                          fontWeight: 600,
+                          color: "var(--muted)",
+                          fontFamily:
+                            '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                        }}
+                      >
+                        {formattedDate}
+                      </div>
                     </div>
-                    <div style={{ fontSize: "12px", color: "var(--muted)", lineHeight: "1.4" }}>
-                      {difficulty !== "hard" && <span>Grade: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{comment.grade || "N/A"}</span> &nbsp;&nbsp;</span>}
-                      {difficulty === "hard" && <span>Grade: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>??</span> &nbsp;&nbsp;</span>}
-                      Textbook: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{difficulty === "hard" ? "??" : (comment.textbook || "N/A")}</span>
+                    <div
+                      style={{
+                        fontSize: "12px",
+                        color: "var(--muted)",
+                        lineHeight: "1.4",
+                      }}
+                    >
+                      {difficulty !== "hard" && (
+                        <span>
+                          Grade:{" "}
+                          <span
+                            style={{
+                              fontWeight: 600,
+                              color: "var(--black)",
+                              fontFamily:
+                                '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                            }}
+                          >
+                            {comment.grade || "N/A"}
+                          </span>{" "}
+                          &nbsp;&nbsp;
+                        </span>
+                      )}
+                      {difficulty === "hard" && (
+                        <span>
+                          Grade:{" "}
+                          <span
+                            style={{
+                              fontWeight: 600,
+                              color: "var(--black)",
+                              fontFamily:
+                                '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                            }}
+                          >
+                            ??
+                          </span>{" "}
+                          &nbsp;&nbsp;
+                        </span>
+                      )}
+                      Textbook:{" "}
+                      <span
+                        style={{
+                          fontWeight: 600,
+                          color: "var(--black)",
+                          fontFamily:
+                            '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                        }}
+                      >
+                        {difficulty === "hard"
+                          ? "??"
+                          : comment.textbook || "N/A"}
+                      </span>
                     </div>
                   </div>
 
                   {/* Right middle: Comment text */}
                   <div style={{ gridColumn: 2, gridRow: 2, marginTop: -8 }}>
-                    <p style={{ margin: 0, fontSize: "13px", color: "var(--black)", lineHeight: "1.5" }}>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: "13px",
+                        color: "var(--black)",
+                        lineHeight: "1.5",
+                      }}
+                    >
                       {comment.comment}
                     </p>
                   </div>
@@ -329,42 +534,83 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
               );
             })
           ) : (
-            <p style={{ color: "var(--muted-2)", fontSize: "13px" }}>No reviews available</p>
+            <p style={{ color: "var(--muted-2)", fontSize: "13px" }}>
+              No reviews available
+            </p>
           )}
         </div>
       </div>
     </div>
   );
-const ProfessorCardRight = ({ prof, comments, difficulty }) => (
-      <div style={{ flex: 1 }}>
-      <div style={{
-        background: "var(--white)",
-        borderRadius: 0,
-        padding: 24,
-        height: "100%",
-        display: "flex",
-        flexDirection: "column"
-      }}>
-        <h3 style={{ margin: "0 0 8px 0", fontSize: "20px", fontWeight: 700, color: "var(--black)" }}>
+  const ProfessorCardRight = ({ prof, comments, difficulty }) => (
+    <div style={{ flex: 1 }}>
+      <div
+        style={{
+          background: "var(--white)",
+          borderRadius: 0,
+          padding: 24,
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <h3
+          style={{
+            margin: "0 0 8px 0",
+            fontSize: "20px",
+            fontWeight: 700,
+            color: "var(--black)",
+          }}
+        >
           {prof.name}
         </h3>
-        <p style={{ margin: "0 0 16px 0", fontSize: "13px", color: "var(--black)" }}>
+        <p
+          style={{
+            margin: "0 0 16px 0",
+            fontSize: "13px",
+            color: "var(--black)",
+          }}
+        >
           {prof.department}
         </p>
 
-        <div style={{
-          background: "var(--light-gray)",
-          padding: 12,
-          borderRadius: 0,
-          marginBottom: 16
-        }}>
-          <p style={{ margin: "0 0 4px 0", fontSize: "12px", color: "var(--black)" }}>Rating</p>
-          <p style={{ margin: 0, fontSize: "24px", fontWeight: 700, color: "var(--primary-blue)" }}>
+        <div
+          style={{
+            background: "var(--light-gray)",
+            padding: 12,
+            borderRadius: 0,
+            marginBottom: 16,
+          }}
+        >
+          <p
+            style={{
+              margin: "0 0 4px 0",
+              fontSize: "12px",
+              color: "var(--black)",
+            }}
+          >
+            Rating
+          </p>
+          <p
+            style={{
+              margin: 0,
+              fontSize: "24px",
+              fontWeight: 700,
+              color: "var(--primary-blue)",
+            }}
+          >
             ?? ⭐
           </p>
         </div>
 
-        <h4 style={{ margin: "0 0 12px 0", fontSize: "13px", fontWeight: 600, color: "var(--muted)" }}>
+        <h4
+          style={{
+            margin: "0 0 12px 0",
+            fontSize: "13px",
+            fontWeight: 600,
+            color: "var(--muted)",
+          }}
+        >
           Recent Reviews:
         </h4>
 
@@ -386,13 +632,28 @@ const ProfessorCardRight = ({ prof, comments, difficulty }) => (
               const formatDate = (dateString) => {
                 if (!dateString) return "";
                 const date = new Date(dateString);
-                const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                const months = [
+                  "Jan",
+                  "Feb",
+                  "Mar",
+                  "Apr",
+                  "May",
+                  "Jun",
+                  "Jul",
+                  "Aug",
+                  "Sep",
+                  "Oct",
+                  "Nov",
+                  "Dec",
+                ];
                 const day = date.getDate();
                 let suffix = "th";
                 if (day === 1 || day === 21 || day === 31) suffix = "st";
                 else if (day === 2 || day === 22) suffix = "nd";
                 else if (day === 3 || day === 23) suffix = "rd";
-                return `${months[date.getMonth()]} ${day}${suffix}, ${date.getFullYear()}`;
+                return `${
+                  months[date.getMonth()]
+                } ${day}${suffix}, ${date.getFullYear()}`;
               };
 
               const formattedDate = formatDate(comment.date);
@@ -409,17 +670,43 @@ const ProfessorCardRight = ({ prof, comments, difficulty }) => (
                     display: "grid",
                     gridTemplateColumns: "70px 1fr",
                     gap: "16px",
-                    gridTemplateRows: "auto auto"
+                    gridTemplateRows: "auto auto",
                   }}
                 >
                   {/* Left: Quality & Difficulty boxes */}
-                  <div style={{ gridRow: "1 / 3", display: "flex", flexDirection: "column", gap: 10, alignItems: "center" }}>
+                  <div
+                    style={{
+                      gridRow: "1 / 3",
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: 10,
+                      alignItems: "center",
+                    }}
+                  >
                     {/* Quality */}
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-                      <div style={{ fontSize: "10px", fontWeight: 600, color: "var(--black)" }}>QUALITY</div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: 3,
+                      }}
+                    >
                       <div
                         style={{
-                          background: difficulty === "hard" ? "var(--dark-gray)" : getQualityColor(comment.clarityRating || 3),
+                          fontSize: "10px",
+                          fontWeight: 600,
+                          color: "var(--black)",
+                        }}
+                      >
+                        QUALITY
+                      </div>
+                      <div
+                        style={{
+                          background:
+                            difficulty === "hard"
+                              ? "var(--dark-gray)"
+                              : getQualityColor(comment.clarityRating || 3),
                           padding: "6px",
                           borderRadius: 0,
                           textAlign: "center",
@@ -428,17 +715,40 @@ const ProfessorCardRight = ({ prof, comments, difficulty }) => (
                           display: "flex",
                           flexDirection: "column",
                           justifyContent: "center",
-                          alignItems: "center"
+                          alignItems: "center",
                         }}
                       >
-                        <div style={{ fontSize: "32px", fontWeight: 700, color: "var(--black)" }}>
-                          {difficulty === "hard" ? "??" : (comment.clarityRating?.toFixed(1) || "N/A")}
+                        <div
+                          style={{
+                            fontSize: "32px",
+                            fontWeight: 700,
+                            color: "var(--black)",
+                          }}
+                        >
+                          {difficulty === "hard"
+                            ? "??"
+                            : comment.clarityRating?.toFixed(1) || "N/A"}
                         </div>
                       </div>
                     </div>
                     {/* Difficulty */}
-                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-                      <div style={{ fontSize: "10px", fontWeight: 600, color: "var(--black)" }}>DIFFICULTY</div>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: 3,
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: "10px",
+                          fontWeight: 600,
+                          color: "var(--black)",
+                        }}
+                      >
+                        DIFFICULTY
+                      </div>
                       <div
                         style={{
                           background: "var(--dark-gray)",
@@ -450,11 +760,19 @@ const ProfessorCardRight = ({ prof, comments, difficulty }) => (
                           display: "flex",
                           flexDirection: "column",
                           justifyContent: "center",
-                          alignItems: "center"
+                          alignItems: "center",
                         }}
                       >
-                        <div style={{ fontSize: "32px", fontWeight: 700, color: "var(--black)" }}>
-                          {difficulty === "hard" ? "??" : (comment.difficultyRating?.toFixed(1) || "N/A")}
+                        <div
+                          style={{
+                            fontSize: "32px",
+                            fontWeight: 700,
+                            color: "var(--black)",
+                          }}
+                        >
+                          {difficulty === "hard"
+                            ? "??"
+                            : comment.difficultyRating?.toFixed(1) || "N/A"}
                         </div>
                       </div>
                     </div>
@@ -462,22 +780,100 @@ const ProfessorCardRight = ({ prof, comments, difficulty }) => (
 
                   {/* Right top: Class name and metadata */}
                   <div style={{ gridColumn: 2, gridRow: 1 }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 4 }}>
-                      <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--black)" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "baseline",
+                        marginBottom: 4,
+                      }}
+                    >
+                      <div
+                        style={{
+                          fontSize: "14px",
+                          fontWeight: 700,
+                          color: "var(--black)",
+                        }}
+                      >
                         {comment.class?.toUpperCase()}
                       </div>
-                      <div style={{ fontSize: "11px", fontWeight: 600, color: "var(--muted)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{formattedDate}</div>
+                      <div
+                        style={{
+                          fontSize: "11px",
+                          fontWeight: 600,
+                          color: "var(--muted)",
+                          fontFamily:
+                            '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                        }}
+                      >
+                        {formattedDate}
+                      </div>
                     </div>
-                    <div style={{ fontSize: "12px", color: "var(--muted)", lineHeight: "1.4" }}>
-                      {difficulty !== "hard" && <span>Grade: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{comment.grade || "N/A"}</span> &nbsp;&nbsp;</span>}
-                      {difficulty === "hard" && <span>Grade: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>??</span> &nbsp;&nbsp;</span>}
-                      Textbook: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{difficulty === "hard" ? "??" : (comment.textbook || "N/A")}</span>
+                    <div
+                      style={{
+                        fontSize: "12px",
+                        color: "var(--muted)",
+                        lineHeight: "1.4",
+                      }}
+                    >
+                      {difficulty !== "hard" && (
+                        <span>
+                          Grade:{" "}
+                          <span
+                            style={{
+                              fontWeight: 600,
+                              color: "var(--black)",
+                              fontFamily:
+                                '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                            }}
+                          >
+                            {comment.grade || "N/A"}
+                          </span>{" "}
+                          &nbsp;&nbsp;
+                        </span>
+                      )}
+                      {difficulty === "hard" && (
+                        <span>
+                          Grade:{" "}
+                          <span
+                            style={{
+                              fontWeight: 600,
+                              color: "var(--black)",
+                              fontFamily:
+                                '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                            }}
+                          >
+                            ??
+                          </span>{" "}
+                          &nbsp;&nbsp;
+                        </span>
+                      )}
+                      Textbook:{" "}
+                      <span
+                        style={{
+                          fontWeight: 600,
+                          color: "var(--black)",
+                          fontFamily:
+                            '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                        }}
+                      >
+                        {difficulty === "hard"
+                          ? "??"
+                          : comment.textbook || "N/A"}
+                      </span>
                     </div>
                   </div>
 
                   {/* Right middle: Comment text */}
                   <div style={{ gridColumn: 2, gridRow: 2, marginTop: -8 }}>
-                    <p style={{ margin: 0, fontSize: "13px", color: "var(--black)", lineHeight: "1.5" }}>
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: "13px",
+                        color: "var(--black)",
+                        lineHeight: "1.5",
+                      }}
+                    >
                       {comment.comment}
                     </p>
                   </div>
@@ -485,14 +881,24 @@ const ProfessorCardRight = ({ prof, comments, difficulty }) => (
               );
             })
           ) : (
-            <p style={{ color: "var(--muted-2)", fontSize: "13px" }}>No reviews available</p>
+            <p style={{ color: "var(--muted-2)", fontSize: "13px" }}>
+              No reviews available
+            </p>
           )}
         </div>
       </div>
     </div>
   );
   return (
-    <div style={{ background: "var(--light-gray)", minHeight: "100vh", paddingBottom: 40, display: "flex", flexDirection: "column" }}>
+    <div
+      style={{
+        background: "var(--light-gray)",
+        minHeight: "100vh",
+        paddingBottom: 40,
+        display: "flex",
+        flexDirection: "column",
+      }}
+    >
       {/* Confetti Canvas */}
       <canvas
         ref={canvasRef}
@@ -503,29 +909,31 @@ const ProfessorCardRight = ({ prof, comments, difficulty }) => (
           width: "100%",
           height: "100%",
           pointerEvents: "none",
-          zIndex: 999
+          zIndex: 999,
         }}
-        width={typeof window !== 'undefined' ? window.innerWidth : 0}
-        height={typeof window !== 'undefined' ? window.innerHeight : 0}
+        width={typeof window !== "undefined" ? window.innerWidth : 0}
+        height={typeof window !== "undefined" ? window.innerHeight : 0}
       />
 
       {/* Success Message Overlay */}
       {showCorrect && (
-        <div style={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          background: "var(--green)",
-          color: "var(--white)",
-          padding: "30px 60px",
-          borderRadius: 12,
-          fontSize: "32px",
-          fontWeight: 700,
-          zIndex: 1001,
-          animation: "scaleIn 0.3s ease-out",
-          boxShadow: "0 10px 40px rgba(0, 0, 0, 0.3)"
-        }}>
+        <div
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            background: "var(--green)",
+            color: "var(--white)",
+            padding: "30px 60px",
+            borderRadius: 12,
+            fontSize: "32px",
+            fontWeight: 700,
+            zIndex: 1001,
+            animation: "scaleIn 0.3s ease-out",
+            boxShadow: "0 10px 40px rgba(0, 0, 0, 0.3)",
+          }}
+        >
           ✨ Correct! ✨
           <style>{`
             @keyframes scaleIn {
@@ -544,21 +952,23 @@ const ProfessorCardRight = ({ prof, comments, difficulty }) => (
 
       {/* Incorrect Message Overlay */}
       {showIncorrect && (
-        <div style={{
-          position: "fixed",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          background: "var(--red)",
-          color: "var(--white)",
-          padding: "30px 60px",
-          borderRadius: 12,
-          fontSize: "32px",
-          fontWeight: 700,
-          zIndex: 1001,
-          animation: "scaleIn 0.3s ease-out",
-          boxShadow: "0 10px 40px rgba(0, 0, 0, 0.3)"
-        }}>
+        <div
+          style={{
+            position: "fixed",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            background: "var(--red)",
+            color: "var(--white)",
+            padding: "30px 60px",
+            borderRadius: 12,
+            fontSize: "32px",
+            fontWeight: 700,
+            zIndex: 1001,
+            animation: "scaleIn 0.3s ease-out",
+            boxShadow: "0 10px 40px rgba(0, 0, 0, 0.3)",
+          }}
+        >
           ✗ Incorrect! ✗
           <style>{`
             @keyframes scaleIn {
@@ -575,16 +985,18 @@ const ProfessorCardRight = ({ prof, comments, difficulty }) => (
         </div>
       )}
       {/* Header */}
-      <div style={{
-        background: "var(--black)",
-        color: "var(--white)",
-        padding: "10px 30px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        width: "100%",
-        boxSizing: "border-box"
-      }}>
+      <div
+        style={{
+          background: "var(--black)",
+          color: "var(--white)",
+          padding: "10px 30px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          width: "100%",
+          boxSizing: "border-box",
+        }}
+      >
         <button
           onClick={onExit}
           style={{
@@ -595,39 +1007,80 @@ const ProfessorCardRight = ({ prof, comments, difficulty }) => (
             cursor: "pointer",
             padding: 0,
             display: "flex",
-            alignItems: "center"
+            alignItems: "center",
           }}
         >
           ← Back
         </button>
-        <h2 style={{ margin: 0, fontSize: "24px", fontWeight: 700, flex: 1, textAlign: "center" }}>Higher or Lower?</h2>
+        <h2
+          style={{
+            margin: 0,
+            fontSize: "24px",
+            fontWeight: 700,
+            flex: 1,
+            textAlign: "center",
+          }}
+        >
+          Higher or Lower?
+        </h2>
         <div style={{ width: 60 }} />
       </div>
 
       {/* Content */}
-      <div ref={shakeElementRef} style={{ flex: 1, maxWidth: 1200, margin: "0 auto", padding: "30px", width: "100%", boxSizing: "border-box", transition: "transform 0.05s linear" }}>
+      <div
+        ref={shakeElementRef}
+        style={{
+          flex: 1,
+          maxWidth: 1200,
+          margin: "0 auto",
+          padding: "30px",
+          width: "100%",
+          boxSizing: "border-box",
+          transition: "transform 0.05s linear",
+        }}
+      >
         {/* Score - Top Left */}
-        <div style={{
-          fontSize: "16px",
-          fontWeight: 600,
-          color: "var(--black)",
-          marginBottom: "20px"
-        }}>
-          Score: <span style={{ color: "var(--primary-blue)", fontSize: "18px" }}>{score}</span>
+        <div
+          style={{
+            fontSize: "16px",
+            fontWeight: 600,
+            color: "var(--black)",
+            marginBottom: "20px",
+          }}
+        >
+          Score:{" "}
+          <span style={{ color: "var(--primary-blue)", fontSize: "18px" }}>
+            {score}
+          </span>
         </div>
 
         {/* Professors Comparison */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 200px 1fr", gap: 20, alignItems: "flex-start", marginBottom: 30 }}>
-          <ProfessorCard prof={leftProf} comments={leftComments} difficulty={difficulty} position="left" />
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "1fr 200px 1fr",
+            gap: 20,
+            alignItems: "flex-start",
+            marginBottom: 30,
+          }}
+        >
+          <ProfessorCard
+            prof={leftProf}
+            comments={leftComments}
+            difficulty={difficulty}
+            position="left"
+          />
 
           {/* Buttons Center */}
-          <div style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 12,
-            justifyContent: "flex-start",
-            paddingTop: 24
-          }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 12,
+              justifyContent: "flex-start",
+              paddingTop: 24,
+            }}
+          >
             <button
               onClick={() => handleChoice("higher")}
               style={{
@@ -640,7 +1093,7 @@ const ProfessorCardRight = ({ prof, comments, difficulty }) => (
                 fontSize: "14px",
                 fontWeight: 600,
                 transition: "all 0.2s",
-                whiteSpace: "nowrap"
+                whiteSpace: "nowrap",
               }}
               onMouseEnter={(e) => {
                 e.target.style.backgroundColor = "var(--dark-blue)";
@@ -666,7 +1119,7 @@ const ProfessorCardRight = ({ prof, comments, difficulty }) => (
                 fontSize: "14px",
                 fontWeight: 600,
                 transition: "all 0.2s",
-                whiteSpace: "nowrap"
+                whiteSpace: "nowrap",
               }}
               onMouseEnter={(e) => {
                 e.target.style.backgroundColor = "var(--dark-blue)";
@@ -681,11 +1134,14 @@ const ProfessorCardRight = ({ prof, comments, difficulty }) => (
             </button>
           </div>
 
-          <ProfessorCardRight prof={rightProf} comments={rightComments} difficulty={difficulty} position="right" />
+          <ProfessorCardRight
+            prof={rightProf}
+            comments={rightComments}
+            difficulty={difficulty}
+            position="right"
+          />
         </div>
       </div>
     </div>
   );
 }
-
-
