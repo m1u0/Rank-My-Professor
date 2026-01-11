@@ -185,7 +185,7 @@ export default function GuessMode({ prof, onGuess, onExit, score }) {
                   {parseFloat(guess).toFixed(1)}
                 </p>
                 <p style={{ margin: "8px 0 0 0", fontSize: "18px", color: "#ffc107" }}>
-                  {"⭐".repeat(Math.round(parseFloat(guess)))}
+                  {"⭐".repeat(Math.floor(parseFloat(guess)))}
                 </p>
               </div>
 
