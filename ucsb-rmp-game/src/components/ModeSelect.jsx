@@ -16,20 +16,72 @@
 */
 
 import React, { useState } from "react";
+import user_ava from "../assets/user_ava.svg";
 
 export default function ModeSelect({ playerName, setMode, difficulty, setDifficulty, onViewLeaderboard }) {
   const [showGuessMenu, setShowGuessMenu] = useState(false);
   return (
     <div style={{ background: "var(--light-gray)", minHeight: "100vh" }}>
       {/* Header */}
-      <div style={{
-        background: "var(--black)",
-        color: "var(--white)",
-        padding: "10px 10px",
-        textAlign: "center"
-      }}>
-        <h1 style={{ margin: 0, fontSize: "24px", fontWeight: 700 }}>Select Gamemode</h1>
-      </div>
+<div
+  style={{
+    position: "relative",
+    background: "var(--black)",
+    color: "var(--white)",
+    padding: "10px 30px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end"
+  }}
+>
+  {/* Absolutely centered title */}
+  <h1
+    style={{
+      position: "absolute",
+      left: "50%",
+      transform: "translateX(-50%)",
+      margin: 0,
+      fontSize: "24px",
+      fontWeight: 700,
+      whiteSpace: "nowrap"
+    }}
+  >
+    Select Gamemode
+  </h1>
+
+  {/* Right-side user info */}
+  <div
+    style={{
+      display: "flex",
+      alignItems: "center",
+      gap: 8
+    }}
+  >
+    <img
+      src={user_ava}
+      alt="avatar"
+      style={{
+        width: 32,
+        height: 32,
+        borderRadius: "50%"
+      }}
+    />
+    <span
+      style={{
+        fontSize: "16px",
+        fontWeight: 500,
+        maxWidth: 120,
+        whiteSpace: "nowrap",
+        overflow: "hidden",
+        textOverflow: "ellipsis"
+      }}
+      title={playerName}
+    >
+      {playerName}
+    </span>
+  </div>
+</div>
+
 
       {/* Content */}
       <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 30px" }}>
