@@ -14,7 +14,7 @@ export default function ConfirmationModal({ message, onConfirm, onCancel }) {
       <div style={{
         background: "#fff",
         padding: 40,
-        borderRadius: 12,
+        borderRadius: 0,
         width: 400,
         textAlign: "center",
         boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
@@ -32,7 +32,7 @@ export default function ConfirmationModal({ message, onConfirm, onCancel }) {
               background: "#1976d2",
               color: "#fff",
               border: "none",
-              borderRadius: "6px",
+              borderRadius: "30px",
               cursor: "pointer",
               fontWeight: "bold"
             }}
@@ -47,7 +47,7 @@ export default function ConfirmationModal({ message, onConfirm, onCancel }) {
               background: "#e0e0e0",
               color: "#333",
               border: "none",
-              borderRadius: "6px",
+              borderRadius: "30px",
               cursor: "pointer",
               fontWeight: "bold"
             }}

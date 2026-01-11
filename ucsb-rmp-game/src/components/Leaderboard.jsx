@@ -23,7 +23,7 @@ export default function Leaderboard({ playerName, onBack }) {
           <div>
             <table style={{ width: "100%", borderCollapse: "collapse" }}>
               <thead>
-                <tr style={{ background: "#f5f5f5", borderBottom: "2px solid #e0e0e0" }}>
+                <tr style={{ background: "#f5f5f5" }}>
                   <th style={{ padding: "12px 16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#666666" }}>Rank</th>
                   <th style={{ padding: "12px 16px", textAlign: "left", fontSize: "13px", fontWeight: 600, color: "#666666" }}>Player</th>
                   <th style={{ padding: "12px 16px", textAlign: "right", fontSize: "13px", fontWeight: 600, color: "#666666" }}>Score</th>
@@ -36,7 +36,6 @@ export default function Leaderboard({ playerName, onBack }) {
                     <tr
                       key={index}
                       style={{
-                        borderBottom: "1px solid #e0e0e0",
                         background: isCurrentPlayer ? "#f0f7ff" : index % 2 === 0 ? "#ffffff" : "#fafafa"
                       }}
                     >
@@ -81,28 +80,45 @@ export default function Leaderboard({ playerName, onBack }) {
   };
 
   return (
-    <div style={{ background: "#fafafa", minHeight: "100vh" }}>
+    <div style={{ background: "#fafafa", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       {/* Header */}
       <div style={{
-        background: "linear-gradient(135deg, #0066cc 0%, #003399 100%)",
+        background: "#000000ff",
         color: "#ffffff",
-        padding: "40px 30px",
-        textAlign: "center",
-        borderBottom: "1px solid #e0e0e0"
+        padding: "10px 30px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        width: "100%",
+        boxSizing: "border-box"
       }}>
-        <h1 style={{ margin: "0 0 8px 0", fontSize: "32px", fontWeight: 700 }}>🏆 Leaderboard</h1>
-        <p style={{ margin: 0, fontSize: "14px", color: "rgba(255,255,255,0.9)" }}>
-          Top Players Across All Modes
-        </p>
+        <button
+          onClick={onBack}
+          style={{
+            background: "none",
+            border: "none",
+            color: "#ffffff",
+            fontSize: "20px",
+            cursor: "pointer",
+            padding: 0,
+            display: "flex",
+            alignItems: "center"
+          }}
+        >
+          ← Back
+        </button>
+        <div style={{ flex: 1, textAlign: "center" }}>
+          <h1 style={{ margin: 0, fontSize: "24px", fontWeight: 700 }}>Leaderboard</h1>
+        </div>
+        <div style={{ width: 60 }} />
       </div>
 
       {/* Content */}
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "40px 30px" }}>
+      <div style={{ flex: 1, maxWidth: 1200, margin: "0 auto", padding: "40px 30px", width: "100%", boxSizing: "border-box" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 30, marginBottom: 40 }}>
           <div style={{
             background: "#ffffff",
-            border: "1px solid #e0e0e0",
-            borderRadius: 8,
+            borderRadius: 0,
             padding: 24
           }}>
             <LeaderboardTable mode="guess" title="Guess the Rating" emoji="📊" />
@@ -110,33 +126,11 @@ export default function Leaderboard({ playerName, onBack }) {
 
           <div style={{
             background: "#ffffff",
-            border: "1px solid #e0e0e0",
-            borderRadius: 8,
+            borderRadius: 0,
             padding: 24
           }}>
             <LeaderboardTable mode="higherlower" title="Higher or Lower" emoji="⬆️" />
           </div>
-        </div>
-
-        <div style={{ textAlign: "center" }}>
-          <button
-            onClick={onBack}
-            style={{
-              padding: "12px 32px",
-              background: "#0066cc",
-              color: "#ffffff",
-              border: "none",
-              borderRadius: 4,
-              fontSize: "16px",
-              fontWeight: 600,
-              cursor: "pointer",
-              transition: "background-color 0.2s"
-            }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = "#003399"}
-            onMouseLeave={(e) => e.target.style.backgroundColor = "#0066cc"}
-          >
-            ← Back to Menu
-          </button>
         </div>
       </div>
     </div>

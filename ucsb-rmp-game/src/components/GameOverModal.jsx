@@ -7,8 +7,7 @@ export default function GameOverModal({ mode, score, leftProf, rightProf, onRest
   const ProfessorCard = ({ prof, label }) => (
     <div style={{
       background: "#f5f5f5",
-      border: "1px solid #e0e0e0",
-      borderRadius: 6,
+      borderRadius: 0,
       padding: 16,
       marginBottom: 8
     }}>
@@ -36,7 +35,7 @@ export default function GameOverModal({ mode, score, leftProf, rightProf, onRest
           background: "#0066cc",
           color: "#fff",
           textDecoration: "none",
-          borderRadius: 4,
+          borderRadius: 20,
           fontSize: "12px",
           fontWeight: 600,
           transition: "background-color 0.2s"
@@ -55,25 +54,58 @@ export default function GameOverModal({ mode, score, leftProf, rightProf, onRest
       inset: 0,
       background: "rgba(0, 0, 0, 0.6)",
       display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
+      flexDirection: "column",
       zIndex: 1000,
       backdropFilter: "blur(4px)"
     }}>
+      {/* Header */}
       <div style={{
-        background: "#ffffff",
-        padding: 40,
-        borderRadius: 8,
-        width: mode === "higherlower" ? 600 : 500,
-        textAlign: "center",
-        boxShadow: "0 10px 40px rgba(0, 0, 0, 0.2)",
-        color: "#333333",
+        background: "#000000ff",
+        color: "#ffffff",
+        padding: "10px 30px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        width: "100%",
+        boxSizing: "border-box"
+      }}>
+        <button
+          onClick={onGoBackToMenu}
+          style={{
+            background: "none",
+            border: "none",
+            color: "#ffffff",
+            fontSize: "20px",
+            cursor: "pointer",
+            padding: 0,
+            display: "flex",
+            alignItems: "center"
+          }}
+        >
+          ← Back
+        </button>
+        <h2 style={{ margin: 0, fontSize: "24px", fontWeight: 700, flex: 1, textAlign: "center" }}>Game Over 🎓</h2>
+        <div style={{ width: 60 }} />
+      </div>
+
+      <div style={{
+        flex: 1,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "30px"
+      }}>
+        <div style={{
+          background: "#ffffff",
+          padding: 40,
+          borderRadius: 0,
+          width: mode === "higherlower" ? 600 : 500,
+          textAlign: "center",
+          boxShadow: "0 10px 40px rgba(0, 0, 0, 0.2)",
+          color: "#333333",
         maxHeight: "90vh",
         overflowY: "auto"
       }}>
-        <h2 style={{ margin: "0 0 16px 0", color: "#333333", fontSize: "28px", fontWeight: 700 }}>
-          Game Over 🎓
-        </h2>
         <p style={{ margin: "0 0 24px 0", color: "#666666", fontSize: "16px" }}>
           Your Score: <span style={{ fontSize: "32px", fontWeight: 700, color: "#0066cc" }}>{score}</span>
         </p>
@@ -83,8 +115,7 @@ export default function GameOverModal({ mode, score, leftProf, rightProf, onRest
             margin: "24px 0",
             padding: "16px",
             background: "#f5f5f5",
-            borderRadius: 8,
-            borderLeft: "4px solid #0066cc"
+            borderRadius: 0
           }}>
             <p style={{ margin: "0 0 12px 0", color: "#666666", fontSize: "13px", fontWeight: 600 }}>
               Professor Guessed:
@@ -106,7 +137,7 @@ export default function GameOverModal({ mode, score, leftProf, rightProf, onRest
                 background: "#0066cc",
                 color: "#fff",
                 textDecoration: "none",
-                borderRadius: 4,
+                borderRadius: 20,
                 fontSize: "13px",
                 fontWeight: 600,
                 transition: "background-color 0.2s"
@@ -124,8 +155,7 @@ export default function GameOverModal({ mode, score, leftProf, rightProf, onRest
             margin: "24px 0",
             padding: "16px",
             background: "#f5f5f5",
-            borderRadius: 8,
-            borderLeft: "4px solid #0066cc"
+            borderRadius: 0
           }}>
             <p style={{ margin: "0 0 16px 0", color: "#666666", fontSize: "13px", fontWeight: 600 }}>
               Professor Ratings Comparison:
@@ -150,7 +180,7 @@ export default function GameOverModal({ mode, score, leftProf, rightProf, onRest
               background: "#0066cc",
               color: "#ffffff",
               border: "none",
-              borderRadius: 4,
+              borderRadius: 30,
               cursor: "pointer",
               fontWeight: 600,
               transition: "background-color 0.2s"
@@ -168,7 +198,7 @@ export default function GameOverModal({ mode, score, leftProf, rightProf, onRest
               background: "#f5f5f5",
               color: "#333333",
               border: "1px solid #e0e0e0",
-              borderRadius: 4,
+              borderRadius: 30,
               cursor: "pointer",
               fontWeight: 600,
               transition: "all 0.2s"
@@ -179,7 +209,9 @@ export default function GameOverModal({ mode, score, leftProf, rightProf, onRest
             Back to Menu
           </button>
         </div>
+        </div>
       </div>
     </div>
   );
 }
+

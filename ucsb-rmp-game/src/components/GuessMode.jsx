@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from "react";
 
-export default function GuessMode({ prof, onGuess, onExit }) {
+export default function GuessMode({ prof, onGuess, onExit, score }) {
   const [guess, setGuess] = useState(2.5);
 
   if (!prof) return null;
@@ -16,27 +16,60 @@ export default function GuessMode({ prof, onGuess, onExit }) {
   };
 
   return (
-    <div style={{ background: "#fafafa", minHeight: "100vh", paddingBottom: 40 }}>
+    <div style={{ background: "#fafafa", minHeight: "100vh", paddingBottom: 40, display: "flex", flexDirection: "column" }}>
       {/* Header */}
       <div style={{
-        background: "linear-gradient(135deg, #0066cc 0%, #003399 100%)",
+        background: "#000000ff",
         color: "#ffffff",
-        padding: "30px",
-        borderBottom: "1px solid #e0e0e0"
+        padding: "10px 30px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        width: "100%",
+        boxSizing: "border-box"
       }}>
-        <h2 style={{ margin: 0, fontSize: "28px", fontWeight: 700 }}>Guess the Rating</h2>
+        <button
+          onClick={onExit}
+          style={{
+            background: "none",
+            border: "none",
+            color: "#ffffff",
+            fontSize: "20px",
+            cursor: "pointer",
+            padding: 0,
+            display: "flex",
+            alignItems: "center"
+          }}
+        >
+          ← Back
+        </button>
+        <h2 style={{ margin: 0, fontSize: "24px", fontWeight: 700, flex: 1, textAlign: "center" }}>Guess the Rating</h2>
+        <div style={{ width: 60 }} />
       </div>
 
       {/* Content */}
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "30px" }}>
+      <div style={{ flex: 1, maxWidth: 1200, margin: "0 auto", padding: "30px", width: "100%", boxSizing: "border-box" }}>
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 30 }}>
-          {/* Professor Info & Reviews */}
+          {/* Score - Left Aligned */}
           <div style={{
-            background: "#ffffff",
-            border: "1px solid #e0e0e0",
-            borderRadius: 8,
-            padding: 24
+            display: "flex",
+            flexDirection: "column"
           }}>
+            <div style={{
+              fontSize: "16px",
+              fontWeight: 600,
+              color: "#333333",
+              marginBottom: "20px"
+            }}>
+              Score: <span style={{ color: "#0066cc", fontSize: "18px" }}>{score}</span>
+            </div>
+
+            {/* Professor Info & Reviews */}
+            <div style={{
+              background: "#ffffff",
+              borderRadius: 0,
+              padding: 24
+            }}>
             <h3 style={{ margin: "0 0 8px 0", fontSize: "24px", fontWeight: 700, color: "#333333" }}>
               {prof.name}
             </h3>
@@ -56,8 +89,7 @@ export default function GuessMode({ prof, onGuess, onExit }) {
                   style={{
                     marginBottom: 16,
                     padding: 12,
-                    border: "1px solid #e0e0e0",
-                    borderRadius: 6,
+                    borderRadius: 0,
                     fontSize: "13px",
                     background: "#fafafa"
                   }}
@@ -86,12 +118,12 @@ export default function GuessMode({ prof, onGuess, onExit }) {
               ))}
             </div>
           </div>
+        </div>
 
           {/* Guess Input */}
           <div style={{
             background: "#ffffff",
-            border: "1px solid #e0e0e0",
-            borderRadius: 8,
+            borderRadius: 0,
             padding: 24,
             display: "flex",
             flexDirection: "column"
@@ -104,10 +136,9 @@ export default function GuessMode({ prof, onGuess, onExit }) {
               <div style={{
                 background: "#f5f5f5",
                 padding: 24,
-                borderRadius: 8,
+                borderRadius: 0,
                 textAlign: "center",
-                marginBottom: 24,
-                borderLeft: "4px solid #ffc107"
+                marginBottom: 24
               }}>
                 <p style={{ margin: "0 0 8px 0", fontSize: "12px", color: "#666666" }}>Your Guess</p>
                 <p style={{
@@ -193,7 +224,7 @@ export default function GuessMode({ prof, onGuess, onExit }) {
                   background: "#0066cc",
                   color: "#ffffff",
                   border: "none",
-                  borderRadius: 4,
+                  borderRadius: 30,
                   cursor: "pointer",
                   fontSize: "16px",
                   fontWeight: 600,
@@ -203,24 +234,6 @@ export default function GuessMode({ prof, onGuess, onExit }) {
                 onMouseLeave={(e) => e.target.style.backgroundColor = "#0066cc"}
               >
                 Submit Answer
-              </button>
-              <button
-                onClick={onExit}
-                style={{
-                  padding: "14px 20px",
-                  background: "#f5f5f5",
-                  color: "#333333",
-                  border: "1px solid #e0e0e0",
-                  borderRadius: 4,
-                  cursor: "pointer",
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  transition: "all 0.2s"
-                }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = "#eeeeee"}
-                onMouseLeave={(e) => e.target.style.backgroundColor = "#f5f5f5"}
-              >
-                ← Back
               </button>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit }) {
+export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit, score }) {
   if (!leftProf || !rightProf) return null;
 
   // Get 3 random comments for each professor
@@ -14,11 +14,10 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit 
   const rightComments = getRandomComments(rightProf);
 
   const ProfessorCard = ({ prof, comments, position }) => (
-    <div style={{ flex: 1 }}>
+      <div style={{ flex: 1 }}>
       <div style={{
         background: "#ffffff",
-        border: "1px solid #e0e0e0",
-        borderRadius: 8,
+        borderRadius: 0,
         padding: 24,
         height: "100%",
         display: "flex",
@@ -34,9 +33,8 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit 
         <div style={{
           background: "#f5f5f5",
           padding: 12,
-          borderRadius: 4,
-          marginBottom: 16,
-          borderLeft: "4px solid #0066cc"
+          borderRadius: 0,
+          marginBottom: 16
         }}>
           <p style={{ margin: "0 0 4px 0", fontSize: "12px", color: "#666666" }}>Current Rating</p>
           <p style={{ margin: 0, fontSize: "24px", fontWeight: 700, color: "#0066cc" }}>
@@ -56,8 +54,7 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit 
                 style={{
                   marginBottom: 12,
                   padding: 10,
-                  border: "1px solid #e0e0e0",
-                  borderRadius: 4,
+                  borderRadius: 0,
                   fontSize: "12px",
                   background: "#fafafa"
                 }}
@@ -85,19 +82,49 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit 
   );
 
   return (
-    <div style={{ background: "#fafafa", minHeight: "100vh", paddingBottom: 40 }}>
+    <div style={{ background: "#fafafa", minHeight: "100vh", paddingBottom: 40, display: "flex", flexDirection: "column" }}>
       {/* Header */}
       <div style={{
-        background: "linear-gradient(135deg, #0066cc 0%, #003399 100%)",
+        background: "#000000ff",
         color: "#ffffff",
-        padding: "30px",
-        borderBottom: "1px solid #e0e0e0"
+        padding: "10px 30px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        width: "100%",
+        boxSizing: "border-box"
       }}>
-        <h2 style={{ margin: 0, fontSize: "28px", fontWeight: 700 }}>Higher or Lower?</h2>
+        <button
+          onClick={onExit}
+          style={{
+            background: "none",
+            border: "none",
+            color: "#ffffff",
+            fontSize: "20px",
+            cursor: "pointer",
+            padding: 0,
+            display: "flex",
+            alignItems: "center"
+          }}
+        >
+          ← Back
+        </button>
+        <h2 style={{ margin: 0, fontSize: "24px", fontWeight: 700, flex: 1, textAlign: "center" }}>Higher or Lower?</h2>
+        <div style={{ width: 60 }} />
       </div>
 
       {/* Content */}
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "30px" }}>
+      <div style={{ flex: 1, maxWidth: 1200, margin: "0 auto", padding: "30px", width: "100%", boxSizing: "border-box" }}>
+        {/* Score - Top Left */}
+        <div style={{
+          fontSize: "16px",
+          fontWeight: 600,
+          color: "#333333",
+          marginBottom: "20px"
+        }}>
+          Score: <span style={{ color: "#0066cc", fontSize: "18px" }}>{score}</span>
+        </div>
+
         {/* Professors Comparison */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 200px 1fr", gap: 20, alignItems: "flex-start", marginBottom: 30 }}>
           <ProfessorCard prof={leftProf} comments={leftComments} position="left" />
@@ -117,7 +144,7 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit 
                 background: "#0066cc",
                 color: "#ffffff",
                 border: "none",
-                borderRadius: 4,
+                borderRadius: 30,
                 cursor: "pointer",
                 fontSize: "14px",
                 fontWeight: 600,
@@ -143,7 +170,7 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit 
                 background: "#0066cc",
                 color: "#ffffff",
                 border: "none",
-                borderRadius: 4,
+                borderRadius: 30,
                 cursor: "pointer",
                 fontSize: "14px",
                 fontWeight: 600,
@@ -160,27 +187,6 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit 
               }}
             >
               ⬇️ Lower
-            </button>
-
-            <button
-              onClick={onExit}
-              style={{
-                padding: "12px 16px",
-                background: "#f5f5f5",
-                color: "#333333",
-                border: "1px solid #e0e0e0",
-                borderRadius: 4,
-                cursor: "pointer",
-                fontSize: "13px",
-                fontWeight: 600,
-                transition: "all 0.2s",
-                whiteSpace: "nowrap",
-                marginTop: 4
-              }}
-              onMouseEnter={(e) => e.target.style.backgroundColor = "#eeeeee"}
-              onMouseLeave={(e) => e.target.style.backgroundColor = "#f5f5f5"}
-            >
-              ← Back
             </button>
           </div>
 

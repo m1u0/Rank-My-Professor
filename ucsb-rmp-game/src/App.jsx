@@ -163,21 +163,22 @@ export default function App() {
   }
 
   return (
-    <div style={{ padding: 30, position: "relative" }}>
-      <h2>Score: {score}</h2>
+    <div style={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+        {mode === "guess" && (
+          <GuessMode prof={leftProf} onGuess={handleGuessRating} onExit={exitToModeSelect} score={score} />
+        )}
 
-      {mode === "guess" && (
-        <GuessMode prof={leftProf} onGuess={handleGuessRating} onExit={exitToModeSelect} />
-      )}
-
-      {mode === "higherlower" && (
-        <HigherLowerMode
-          leftProf={leftProf}
-          rightProf={rightProf}
-          onChoose={handleHigherLower}
-          onExit={exitToModeSelect}
-        />
-      )}
+        {mode === "higherlower" && (
+          <HigherLowerMode
+            leftProf={leftProf}
+            rightProf={rightProf}
+            onChoose={handleHigherLower}
+            onExit={exitToModeSelect}
+            score={score}
+          />
+        )}
+      </div>
 
       {lost && <GameOverModal mode={mode} score={score} leftProf={leftProf} rightProf={rightProf} onRestart={restartGame} onGoBackToMenu={goBackToMenu} />}
       {showConfirm && (

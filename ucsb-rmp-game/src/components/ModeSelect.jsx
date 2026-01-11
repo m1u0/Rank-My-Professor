@@ -5,27 +5,22 @@ export default function ModeSelect({ playerName, setMode, onViewLeaderboard }) {
     <div style={{ background: "#fafafa", minHeight: "100vh" }}>
       {/* Header */}
       <div style={{
-        background: "linear-gradient(135deg, #0066cc 0%, #003399 100%)",
+        background: "#000000ff",
         color: "#ffffff",
-        padding: "40px 30px",
-        textAlign: "center",
-        borderBottom: "1px solid #e0e0e0"
+        padding: "10px 10px",
+        textAlign: "center"
       }}>
-        <h1 style={{ margin: 0, fontSize: "32px", fontWeight: 700 }}>Welcome back, {playerName}! 👋</h1>
+        <h1 style={{ margin: 0, fontSize: "24px", fontWeight: 700 }}>Select Gamemode</h1>
       </div>
 
       {/* Content */}
       <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 30px" }}>
-        <h2 style={{ fontSize: "24px", fontWeight: 600, marginBottom: 32, color: "#333333" }}>
-          Select a Game Mode
-        </h2>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
           {/* Guess Mode Card */}
           <div style={{
             background: "#ffffff",
-            border: "1px solid #e0e0e0",
-            borderRadius: 8,
+            borderRadius: 0,
             padding: 24,
             cursor: "pointer",
             transition: "all 0.3s ease",
@@ -54,7 +49,7 @@ export default function ModeSelect({ playerName, setMode, onViewLeaderboard }) {
                 background: "#0066cc",
                 color: "#ffffff",
                 border: "none",
-                borderRadius: 4,
+                borderRadius: 30,
                 fontSize: "16px",
                 fontWeight: 600,
                 cursor: "pointer",
@@ -70,8 +65,7 @@ export default function ModeSelect({ playerName, setMode, onViewLeaderboard }) {
           {/* Higher/Lower Mode Card */}
           <div style={{
             background: "#ffffff",
-            border: "1px solid #e0e0e0",
-            borderRadius: 8,
+            borderRadius: 0,
             padding: 24,
             cursor: "pointer",
             transition: "all 0.3s ease",
@@ -100,7 +94,7 @@ export default function ModeSelect({ playerName, setMode, onViewLeaderboard }) {
                 background: "#0066cc",
                 color: "#ffffff",
                 border: "none",
-                borderRadius: 4,
+                borderRadius: 30,
                 fontSize: "16px",
                 fontWeight: 600,
                 cursor: "pointer",
@@ -123,7 +117,7 @@ export default function ModeSelect({ playerName, setMode, onViewLeaderboard }) {
               background: "#f5f5f5",
               color: "#333333",
               border: "1px solid #e0e0e0",
-              borderRadius: 4,
+              borderRadius: 30,
               fontSize: "16px",
               fontWeight: 600,
               cursor: "pointer",
