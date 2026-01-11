@@ -1,3 +1,12 @@
+/*
+  VISUAL STYLE (canonical)
+
+  - Centralized styles live in `src/index.css`. Use the defined variables only.
+  - Use `--primary-blue`/`--dark-blue` for all blue buttons and `--light-gray` for gray buttons.
+  - Prefer `.btn-primary` and `.btn-secondary` classes for consistency across components.
+  - Avoid adding new hex colors; update `src/index.css` if the palette must change.
+*/
+
 import React from "react";
 
 export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit, score, difficulty }) {

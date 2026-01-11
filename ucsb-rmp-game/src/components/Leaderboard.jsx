@@ -1,3 +1,12 @@
+/*
+  VISUAL STYLE (canonical)
+
+  - Refer to `src/index.css` for the canonical palette and utility classes.
+  - Use CSS variables (e.g. `var(--primary-blue)`) for all color work. Do not hardcode hex values.
+  - Use `.btn-primary` for blue buttons and `.btn-secondary` for gray/outlined buttons.
+  - When generating or modifying components (including via AI), keep styling consistent with this guide.
+*/
+
 import React from "react";
 
 export default function Leaderboard({ playerName, onBack }) {

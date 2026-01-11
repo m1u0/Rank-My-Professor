@@ -1,3 +1,11 @@
+/*
+  VISUAL STYLE (canonical)
+
+  - Use the palette in `src/index.css` only. Use CSS variables for color: `var(--primary-blue)`, `var(--light-gray)`, etc.
+  - Prefer `.btn-primary` and `.btn-secondary` for buttons to keep behavior consistent.
+  - Avoid hex literals in components; update `src/index.css` for palette changes.
+*/
+
 import React from "react";
 
 export default function ConfirmationModal({ message, onConfirm, onCancel }) {

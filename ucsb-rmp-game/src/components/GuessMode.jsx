@@ -1,3 +1,12 @@
+/*
+  VISUAL STYLE (canonical)
+
+  - See `src/index.css` for the source-of-truth palette and utility classes.
+  - Use CSS variables (e.g. `var(--primary-blue)`) — do not add hex literals.
+  - Use `.btn-primary` and `.btn-secondary` for consistent button behavior when possible.
+  - Inline styles may reference variables: `style={{ background: 'var(--primary-blue)' }}`.
+*/
+
 import React, { useState, useMemo, useEffect } from "react";
 
 export default function GuessMode({ prof, onGuess, onExit, score, difficulty }) {

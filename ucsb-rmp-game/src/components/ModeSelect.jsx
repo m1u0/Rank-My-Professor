@@ -1,3 +1,20 @@
+/*
+  VISUAL STYLE (canonical)
+
+  - This project centralizes the visual design in `src/index.css`.
+  - Use only the CSS variables defined in `src/index.css` for colors:
+    --white, --light-gray, --primary-blue, --dark-blue, --black,
+    --green, --red, --yellow, --surface, --muted, --muted-2, --surface-border.
+  - Buttons:
+    * Primary: use `className="btn-primary"` or `background: var(--primary-blue); color: var(--white)`.
+      On hover use `var(--dark-blue)`.
+    * Secondary (gray): use `className="btn-secondary"` or `background: var(--light-gray); color: var(--primary-blue); border: 1px solid var(--primary-blue)`.
+      On hover become dark-blue fill with white text.
+  - Do NOT use hardcoded hex color literals (e.g. `#0066cc`, `#ffffff`) — always use the variables above.
+  - When adding inline styles prefer `style={{ background: 'var(--primary-blue)' }}` or add/compose utility classes.
+  - Keep this header at the top of each component so code-generating tools and contributors can follow the palette.
+*/
+
 import React, { useState } from "react";
 
 export default function ModeSelect({ playerName, setMode, difficulty, setDifficulty, onViewLeaderboard }) {
