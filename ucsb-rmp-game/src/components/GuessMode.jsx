@@ -127,43 +127,107 @@ export default function GuessMode({ prof, onGuess, onExit, score, difficulty }) 
               Student Reviews
             </h4>
             <div style={{ maxHeight: "450px", overflowY: "auto", paddingRight: 8 }}>
-              {comments.map((comment, i) => (
-                <div
-                  key={i}
-                  style={{
-                    marginBottom: 16,
-                    padding: 12,
-                    borderRadius: 0,
-                    fontSize: "13px",
-                    background: "var(--light-gray)"
-                  }}
-                >
-                  <p style={{ margin: "0 0 8px 0", fontStyle: "italic", color: "var(--black)", lineHeight: "1.5" }}>
-                    "{comment.comment}"
-                  </p>
-                  <div style={{
-                    fontSize: "12px",
-                    color: "var(--black)",
-                    margin: "8px 0 0 0"
-                  }}>
-                    <span style={{ marginRight: 12 }}>📚 {comment.class}</span>
-                    {difficulty !== "hard" && <span>Grade: {comment.grade}</span>}
-                  </div>
-                  <div style={{ fontSize: "12px", color: "var(--black)", marginTop: 4 }}>
-                    {difficulty === "easy" && (
-                      <>
-                        <span style={{ marginRight: 12 }}>
-                          💡 Clarity: {comment.clarityRating}/5
+              {comments.map((comment, i) => {
+                const getQualityColor = (rating) => {
+                  if (rating >= 4.5) return "var(--green)";
+                  if (rating >= 3) return "var(--yellow)";
+                  return "var(--red)";
+                };
+                const getDifficultyColor = (rating) => {
+                  if (rating >= 4) return "var(--red)";
+                  if (rating >= 2) return "var(--yellow)";
+                  return "var(--green)";
+                };
+                return (
+                  <div
+                    key={i}
+                    style={{
+                      marginBottom: 20,
+                      padding: "20px",
+                      borderRadius: 0,
+                      background: "var(--light-gray)",
+                      border: "1px solid var(--surface-border)",
+                      display: "grid",
+                      gridTemplateColumns: "80px 1fr",
+                      gap: "20px",
+                      gridTemplateRows: "auto auto"
+                    }}
+                  >
+                    {/* Left: Quality & Difficulty boxes */}
+                    <div style={{ gridRow: "1 / 3", display: "flex", flexDirection: "column", gap: 12 }}>
+                      {/* Quality box */}
+                      <div
+                        style={{
+                          background: getQualityColor(comment.clarityRating || 3),
+                          padding: "12px 8px",
+                          borderRadius: 0,
+                          textAlign: "center",
+                          minWidth: 70
+                        }}
+                      >
+                        <div style={{ fontSize: "10px", fontWeight: 600, color: "var(--black)", marginBottom: 4 }}>QUALITY</div>
+                        <div style={{ fontSize: "24px", fontWeight: 700, color: "var(--black)" }}>
+                          {comment.clarityRating || "N/A"}
+                        </div>
+                      </div>
+                      {/* Difficulty box */}
+                      <div
+                        style={{
+                          background: "var(--dark-gray)",
+                          padding: "12px 8px",
+                          borderRadius: 0,
+                          textAlign: "center",
+                          minWidth: 70
+                        }}
+                      >
+                        <div style={{ fontSize: "10px", fontWeight: 600, color: "var(--black)", marginBottom: 4 }}>DIFFICULTY</div>
+                        <div style={{ fontSize: "24px", fontWeight: 700, color: "var(--black)" }}>
+                          {comment.difficultyRating || "N/A"}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right top: Class name and metadata */}
+                    <div style={{ gridColumn: 2, gridRow: 1, display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                      <div>
+                        <div style={{ fontSize: "16px", fontWeight: 700, color: "var(--black)", marginBottom: 6 }}>
+                          {comment.class}
+                        </div>
+                        <div style={{ fontSize: "13px", color: "var(--muted)", lineHeight: "1.5" }}>
+                          For Credit: Yes &nbsp; Attendance: Not Mandatory &nbsp; Grade: {comment.grade || "N/A"} &nbsp; Textbook: {comment.textbook || "N/A"}
+                        </div>
+                      </div>
+                      <div style={{ fontSize: "12px", color: "var(--muted)" }}>Jan 7th, 2026</div>
+                    </div>
+
+                    {/* Right middle: Comment text */}
+                    <div style={{ gridColumn: 2, gridRow: 2, marginTop: -10 }}>
+                      <p style={{ margin: "0 0 12px 0", fontSize: "14px", color: "var(--black)", lineHeight: "1.6" }}>
+                        {comment.comment}
+                      </p>
+                    </div>
+
+                    {/* Bottom: Tags row (placeholder for now) */}
+                    <div style={{ gridColumn: "1 / -1", display: "flex", gap: 8, marginTop: 8, flexWrap: "wrap" }}>
+                      {comment.tags && comment.tags.map((tag, idx) => (
+                        <span
+                          key={idx}
+                          style={{
+                            fontSize: "11px",
+                            fontWeight: 600,
+                            color: "var(--black)",
+                            background: "var(--light-gray)",
+                            padding: "6px 10px",
+                            borderRadius: 4
+                          }}
+                        >
+                          {tag}
                         </span>
-                        <span style={{ marginRight: 12 }}>
-                          📊 Difficulty: {comment.difficultyRating}/5
-                        </span>
-                        <span>👍 Helpful: {comment.helpfulRating}/5</span>
-                      </>
-                    )}
+                      ))}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>
