@@ -185,7 +185,7 @@ export default function GuessMode({ prof, onGuess, onExit, score }) {
                   {parseFloat(guess).toFixed(1)}
                 </p>
                 <p style={{ margin: "8px 0 0 0", fontSize: "18px", color: "var(--yellow)" }}>
-                  {"⭐".repeat(Math.round(parseFloat(guess)))}
+                  {"⭐".repeat(Math.floor(parseFloat(guess)))}
                 </p>
               </div>
 
@@ -244,7 +244,7 @@ export default function GuessMode({ prof, onGuess, onExit, score }) {
 
               <input
                 type="range"
-                min="0"
+                min="1"
                 max="5"
                 step="0.1"
                 value={guess}
@@ -290,7 +290,7 @@ export default function GuessMode({ prof, onGuess, onExit, score }) {
                 marginTop: 8,
                 marginBottom: 24
               }}>
-                <span>0</span>
+                <span>1</span>
                 <span>5</span>
               </div>
             </div>

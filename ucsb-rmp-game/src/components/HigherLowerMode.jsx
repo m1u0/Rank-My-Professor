@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit, score }) {
+export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit, score, difficulty }) {
   if (!leftProf || !rightProf) return null;
 
   // Get 3 random comments for each professor
@@ -16,33 +16,33 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
   const ProfessorCard = ({ prof, comments, position }) => (
       <div style={{ flex: 1 }}>
       <div style={{
-        background: "var(--white)",
+        background: "#ffffff",
         borderRadius: 0,
         padding: 24,
         height: "100%",
         display: "flex",
         flexDirection: "column"
       }}>
-        <h3 style={{ margin: "0 0 8px 0", fontSize: "20px", fontWeight: 700, color: "var(--black)" }}>
+        <h3 style={{ margin: "0 0 8px 0", fontSize: "20px", fontWeight: 700, color: "#333333" }}>
           {prof.name}
         </h3>
-        <p style={{ margin: "0 0 16px 0", fontSize: "13px", color: "var(--black)" }}>
+        <p style={{ margin: "0 0 16px 0", fontSize: "13px", color: "#666666" }}>
           {prof.department}
         </p>
 
         <div style={{
-          background: "var(--light-gray)",
+          background: "#f5f5f5",
           padding: 12,
           borderRadius: 0,
           marginBottom: 16
         }}>
-          <p style={{ margin: "0 0 4px 0", fontSize: "12px", color: "var(--black)" }}>Current Rating</p>
-          <p style={{ margin: 0, fontSize: "24px", fontWeight: 700, color: "var(--primary-blue)" }}>
+          <p style={{ margin: "0 0 4px 0", fontSize: "12px", color: "#666666" }}>Current Rating</p>
+          <p style={{ margin: 0, fontSize: "24px", fontWeight: 700, color: "#0066cc" }}>
             {prof.rating.toFixed(1)} ⭐
           </p>
         </div>
 
-        <h4 style={{ margin: "0 0 12px 0", fontSize: "13px", fontWeight: 600, color: "var(--black)" }}>
+        <h4 style={{ margin: "0 0 12px 0", fontSize: "13px", fontWeight: 600, color: "#333333" }}>
           Recent Reviews:
         </h4>
 
@@ -56,20 +56,28 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
                   padding: 10,
                   borderRadius: 0,
                   fontSize: "12px",
-                  background: "var(--light-gray)"
+                  background: "#fafafa"
                 }}
               >
-                <p style={{ margin: "0 0 6px 0", fontStyle: "italic", color: "var(--black)" }}>
+                <p style={{ margin: "0 0 6px 0", fontStyle: "italic", color: "#333333" }}>
                   "{comment.comment}"
                 </p>
-                <div style={{ fontSize: "11px", color: "var(--black)", marginTop: 6, display: "flex", gap: 8, flexWrap: "wrap" }}>
+                <div style={{ fontSize: "11px", color: "#999", marginTop: 6, display: "flex", gap: 8, flexWrap: "wrap" }}>
                   <span>📚 {comment.class}</span>
-                  <span>|</span>
-                  <span>Grade: {comment.grade}</span>
-                  <span>|</span>
-                  <span>Clarity: {comment.clarityRating}</span>
-                  <span>|</span>
-                  <span>Difficulty: {comment.difficultyRating}</span>
+                  {difficulty !== "hard" && (
+                    <>
+                      <span>|</span>
+                      <span>Grade: {comment.grade || "N/A"}</span>
+                    </>
+                  )}
+                  {difficulty === "easy" && (
+                    <>
+                      <span>|</span>
+                      <span>Clarity: {comment.clarityRating}</span>
+                      <span>|</span>
+                      <span>Difficulty: {comment.difficultyRating}</span>
+                    </>
+                  )}
                 </div>
               </div>
             ))
@@ -82,29 +90,24 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
   );
 
   return (
-    <div style={{ background: "var(--light-gray)", minHeight: "100vh", paddingBottom: 40, display: "flex", flexDirection: "column" }}>
+    <div style={{ background: "#fafafa", minHeight: "100vh", paddingBottom: 40, display: "flex", flexDirection: "column" }}>
       {/* Header */}
       <div style={{
-        background: "var(--black)",
-        color: "var(--white)",
+        background: "#000000ff",
+        color: "#ffffff",
         padding: "10px 30px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         width: "100%",
-        boxSizing: "border-box",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1000
+        boxSizing: "border-box"
       }}>
         <button
           onClick={onExit}
           style={{
             background: "none",
             border: "none",
-            color: "var(--white)",
+            color: "#ffffff",
             fontSize: "20px",
             cursor: "pointer",
             padding: 0,
@@ -119,15 +122,15 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
       </div>
 
       {/* Content */}
-      <div style={{ flex: 1, maxWidth: 1200, margin: "0 auto", padding: "30px", paddingTop: 80, width: "100%", boxSizing: "border-box" }}>
+      <div style={{ flex: 1, maxWidth: 1200, margin: "0 auto", padding: "30px", width: "100%", boxSizing: "border-box" }}>
         {/* Score - Top Left */}
         <div style={{
           fontSize: "16px",
           fontWeight: 600,
-          color: "var(--black)",
+          color: "#333333",
           marginBottom: "20px"
         }}>
-          Score: <span style={{ color: "var(--primary-blue)", fontSize: "18px" }}>{score}</span>
+          Score: <span style={{ color: "#0066cc", fontSize: "18px" }}>{score}</span>
         </div>
 
         {/* Professors Comparison */}
@@ -146,8 +149,8 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
               onClick={() => onChoose("higher")}
               style={{
                 padding: "12px 16px",
-                background: "var(--primary-blue)",
-                color: "var(--white)",
+                background: "#0066cc",
+                color: "#ffffff",
                 border: "none",
                 borderRadius: 30,
                 cursor: "pointer",
@@ -157,11 +160,11 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
                 whiteSpace: "nowrap"
               }}
               onMouseEnter={(e) => {
-                e.target.style.backgroundColor = "var(--dark-blue)";
+                e.target.style.backgroundColor = "#003399";
                 e.target.style.transform = "scale(1.05)";
               }}
               onMouseLeave={(e) => {
-                e.target.style.backgroundColor = "var(--primary-blue)";
+                e.target.style.backgroundColor = "#0066cc";
                 e.target.style.transform = "scale(1)";
               }}
             >
@@ -172,8 +175,8 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
               onClick={() => onChoose("lower")}
               style={{
                 padding: "12px 16px",
-                background: "var(--primary-blue)",
-                color: "var(--white)",
+                background: "#0066cc",
+                color: "#ffffff",
                 border: "none",
                 borderRadius: 30,
                 cursor: "pointer",
@@ -183,11 +186,11 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
                 whiteSpace: "nowrap"
               }}
               onMouseEnter={(e) => {
-                e.target.style.backgroundColor = "var(--dark-blue)";
+                e.target.style.backgroundColor = "#003399";
                 e.target.style.transform = "scale(1.05)";
               }}
               onMouseLeave={(e) => {
-                e.target.style.backgroundColor = "var(--primary-blue)";
+                e.target.style.backgroundColor = "#0066cc";
                 e.target.style.transform = "scale(1)";
               }}
             >
