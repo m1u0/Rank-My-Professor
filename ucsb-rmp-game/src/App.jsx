@@ -12,7 +12,7 @@ export default function App() {
   const [playerName, setPlayerName] = useState("");
   const [started, setStarted] = useState(false);
   const [mode, setMode] = useState(null);
-  const [difficulty, setDifficulty] = useState(null);
+  const [difficulty, setDifficulty] = useState("normal");
   const [score, setScore] = useState(0);
   const [lost, setLost] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
