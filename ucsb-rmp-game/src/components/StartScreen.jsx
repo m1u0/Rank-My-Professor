@@ -99,10 +99,20 @@ export default function StartScreen({ playerName, setPlayerName, onStart }) {
               fontSize: "16px",
               fontWeight: 600,
               cursor: canStart ? "pointer" : "not-allowed",
-              transition: "background-color 0.2s"
+              transition: "all 0.2s"
             }}
-            onMouseEnter={(e) => canStart && (e.target.style.backgroundColor = "var(--dark-blue)")}
-            onMouseLeave={(e) => canStart && (e.target.style.backgroundColor = "var(--primary-blue)")}
+            onMouseEnter={(e) => {
+              if (canStart) {
+                e.target.style.backgroundColor = "var(--dark-blue)";
+                e.target.style.transform = "scale(1.05)";
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (canStart) {
+                e.target.style.backgroundColor = "var(--primary-blue)";
+                e.target.style.transform = "scale(1)";
+              }
+            }}
           >
             Start Game
           </button>

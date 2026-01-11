@@ -42,7 +42,16 @@ export default function ConfirmationModal({ message, onConfirm, onCancel }) {
               border: "none",
               borderRadius: "30px",
               cursor: "pointer",
-              fontWeight: "bold"
+              fontWeight: "bold",
+              transition: "all 0.2s"
+            }}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = "var(--dark-blue)";
+              e.target.style.transform = "scale(1.05)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = "var(--primary-blue)";
+              e.target.style.transform = "scale(1)";
             }}
           >
             Yes
@@ -64,11 +73,13 @@ export default function ConfirmationModal({ message, onConfirm, onCancel }) {
               e.target.style.backgroundColor = "var(--dark-blue)";
               e.target.style.color = "var(--white)";
               e.target.style.borderColor = "var(--dark-blue)";
+              e.target.style.transform = "scale(1.05)";
             }}
             onMouseLeave={(e) => {
               e.target.style.backgroundColor = "var(--light-gray)";
               e.target.style.color = "var(--primary-blue)";
               e.target.style.borderColor = "var(--primary-blue)";
+              e.target.style.transform = "scale(1)";
             }}
           >
             Cancel

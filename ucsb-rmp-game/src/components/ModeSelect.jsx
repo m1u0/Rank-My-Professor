@@ -206,10 +206,20 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
                 fontSize: "16px",
                 fontWeight: 600,
                 cursor: difficulty ? "pointer" : "not-allowed",
-                transition: "background-color 0.2s"
+                transition: "all 0.2s"
               }}
-              onMouseEnter={(e) => difficulty && (e.target.style.backgroundColor = "var(--dark-blue)")}
-              onMouseLeave={(e) => difficulty && (e.target.style.backgroundColor = "var(--primary-blue)")}
+              onMouseEnter={(e) => {
+                if (difficulty) {
+                  e.target.style.backgroundColor = "var(--dark-blue)";
+                  e.target.style.transform = "scale(1.05)";
+                }
+              }}
+              onMouseLeave={(e) => {
+                if (difficulty) {
+                  e.target.style.backgroundColor = "var(--primary-blue)";
+                  e.target.style.transform = "scale(1)";
+                }
+              }}
             >
               Play Now
             </button>
@@ -235,11 +245,13 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
               e.target.style.backgroundColor = "var(--dark-blue)";
               e.target.style.color = "var(--white)";
               e.target.style.borderColor = "var(--dark-blue)";
+              e.target.style.transform = "scale(1.05)";
             }}
             onMouseLeave={(e) => {
               e.target.style.backgroundColor = "var(--light-gray)";
               e.target.style.color = "var(--primary-blue)";
               e.target.style.borderColor = "var(--primary-blue)";
+              e.target.style.transform = "scale(1)";
             }}
           >
             🏆 View Leaderboard
