@@ -149,7 +149,7 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
             }}
           >
             <h3 style={{ fontSize: "22px", fontWeight: 700, color: "var(--primary-blue)", margin: "0 0 12px 0" }}>
-              🎮 Arcade: Guess the Rating
+              🎮 Guess the Rating
             </h3>
             <p style={{ color: "var(--black)", lineHeight: "1.6", marginBottom: 20 }}>
               Read student reviews and guess the professor's average rating. Choose a mode and play!
