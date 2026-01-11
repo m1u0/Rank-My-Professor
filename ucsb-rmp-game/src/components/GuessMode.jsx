@@ -138,6 +138,22 @@ export default function GuessMode({ prof, onGuess, onExit, score, difficulty }) 
                   if (rating >= 2) return "var(--yellow)";
                   return "var(--green)";
                 };
+
+                // Format date with ordinal suffix
+                const formatDate = (dateString) => {
+                  if (!dateString) return "";
+                  const date = new Date(dateString);
+                  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                  const day = date.getDate();
+                  let suffix = "th";
+                  if (day === 1 || day === 21 || day === 31) suffix = "st";
+                  else if (day === 2 || day === 22) suffix = "nd";
+                  else if (day === 3 || day === 23) suffix = "rd";
+                  return `${months[date.getMonth()]} ${day}${suffix}, ${date.getFullYear()}`;
+                };
+
+                const formattedDate = formatDate(comment.date);
+
                 return (
                   <div
                     key={i}
@@ -154,50 +170,64 @@ export default function GuessMode({ prof, onGuess, onExit, score, difficulty }) 
                     }}
                   >
                     {/* Left: Quality & Difficulty boxes */}
-                    <div style={{ gridRow: "1 / 3", display: "flex", flexDirection: "column", gap: 12 }}>
-                      {/* Quality box */}
-                      <div
-                        style={{
-                          background: getQualityColor(comment.clarityRating || 3),
-                          padding: "12px 8px",
-                          borderRadius: 0,
-                          textAlign: "center",
-                          minWidth: 70
-                        }}
-                      >
-                        <div style={{ fontSize: "10px", fontWeight: 600, color: "var(--black)", marginBottom: 4 }}>QUALITY</div>
-                        <div style={{ fontSize: "24px", fontWeight: 700, color: "var(--black)" }}>
-                          {comment.clarityRating || "N/A"}
+                    <div style={{ gridRow: "1 / 3", display: "flex", flexDirection: "column", gap: 12, alignItems: "center" }}>
+                      {/* Quality */}
+                      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+                        <div style={{ fontSize: "11px", fontWeight: 600, color: "var(--black)" }}>QUALITY</div>
+                        <div
+                          style={{
+                            background: getQualityColor(comment.clarityRating || 3),
+                            padding: "8px",
+                            borderRadius: 0,
+                            textAlign: "center",
+                            width: 80,
+                            aspectRatio: 1,
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center"
+                          }}
+                        >
+                          <div style={{ fontSize: "36px", fontWeight: 700, color: "var(--black)" }}>
+                            {comment.clarityRating?.toFixed(1) || "N/A"}
+                          </div>
                         </div>
                       </div>
-                      {/* Difficulty box */}
-                      <div
-                        style={{
-                          background: "var(--dark-gray)",
-                          padding: "12px 8px",
-                          borderRadius: 0,
-                          textAlign: "center",
-                          minWidth: 70
-                        }}
-                      >
-                        <div style={{ fontSize: "10px", fontWeight: 600, color: "var(--black)", marginBottom: 4 }}>DIFFICULTY</div>
-                        <div style={{ fontSize: "24px", fontWeight: 700, color: "var(--black)" }}>
-                          {comment.difficultyRating || "N/A"}
+                      {/* Difficulty */}
+                      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+                        <div style={{ fontSize: "11px", fontWeight: 600, color: "var(--black)" }}>DIFFICULTY</div>
+                        <div
+                          style={{
+                            background: "var(--dark-gray)",
+                            padding: "8px",
+                            borderRadius: 0,
+                            textAlign: "center",
+                            width: 80,
+                            aspectRatio: 1,
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center"
+                          }}
+                        >
+                          <div style={{ fontSize: "36px", fontWeight: 700, color: "var(--black)" }}>
+                            {comment.difficultyRating?.toFixed(1) || "N/A"}
+                          </div>
                         </div>
                       </div>
                     </div>
 
                     {/* Right top: Class name and metadata */}
-                    <div style={{ gridColumn: 2, gridRow: 1, display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                      <div>
-                        <div style={{ fontSize: "16px", fontWeight: 700, color: "var(--black)", marginBottom: 6 }}>
-                          {comment.class}
+                    <div style={{ gridColumn: 2, gridRow: 1 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: 6 }}>
+                        <div style={{ fontSize: "16px", fontWeight: 700, color: "var(--black)" }}>
+                          {comment.class?.toUpperCase()}
                         </div>
-                        <div style={{ fontSize: "13px", color: "var(--muted)", lineHeight: "1.5" }}>
-                          For Credit: Yes &nbsp; Attendance: Not Mandatory &nbsp; Grade: {comment.grade || "N/A"} &nbsp; Textbook: {comment.textbook || "N/A"}
-                        </div>
+                        <div style={{ fontSize: "12px", fontWeight: 600, color: "var(--muted)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{formattedDate}</div>
                       </div>
-                      <div style={{ fontSize: "12px", color: "var(--muted)" }}>Jan 7th, 2026</div>
+                      <div style={{ fontSize: "13px", color: "var(--muted)", lineHeight: "1.5" }}>
+                        For Credit: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>Yes</span> &nbsp; Attendance: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>Not Mandatory</span> &nbsp; Grade: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{comment.grade || "N/A"}</span> &nbsp; Textbook: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{comment.textbook || "N/A"}</span>
+                      </div>
                     </div>
 
                     {/* Right middle: Comment text */}
