@@ -179,7 +179,7 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
   const leftComments = getRandomComments(leftProf);
   const rightComments = getRandomComments(rightProf);
 
-  const ProfessorCard = ({ prof, comments }) => (
+  const ProfessorCard = ({ prof, comments, difficulty }) => (
       <div style={{ flex: 1 }}>
       <div style={{
         background: "var(--white)",
@@ -263,7 +263,7 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
                       <div style={{ fontSize: "10px", fontWeight: 600, color: "var(--black)" }}>QUALITY</div>
                       <div
                         style={{
-                          background: getQualityColor(comment.clarityRating || 3),
+                          background: difficulty === "hard" ? "var(--dark-gray)" : getQualityColor(comment.clarityRating || 3),
                           padding: "6px",
                           borderRadius: 0,
                           textAlign: "center",
@@ -276,7 +276,7 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
                         }}
                       >
                         <div style={{ fontSize: "32px", fontWeight: 700, color: "var(--black)" }}>
-                          {comment.clarityRating?.toFixed(1) || "N/A"}
+                          {difficulty === "hard" ? "??" : (comment.clarityRating?.toFixed(1) || "N/A")}
                         </div>
                       </div>
                     </div>
@@ -298,7 +298,7 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
                         }}
                       >
                         <div style={{ fontSize: "32px", fontWeight: 700, color: "var(--black)" }}>
-                          {comment.difficultyRating?.toFixed(1) || "N/A"}
+                          {difficulty === "hard" ? "??" : (comment.difficultyRating?.toFixed(1) || "N/A")}
                         </div>
                       </div>
                     </div>
@@ -334,7 +334,7 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
       </div>
     </div>
   );
-const ProfessorCardRight = ({ prof, comments }) => (
+const ProfessorCardRight = ({ prof, comments, difficulty }) => (
       <div style={{ flex: 1 }}>
       <div style={{
         background: "var(--white)",
@@ -418,7 +418,7 @@ const ProfessorCardRight = ({ prof, comments }) => (
                       <div style={{ fontSize: "10px", fontWeight: 600, color: "var(--black)" }}>QUALITY</div>
                       <div
                         style={{
-                          background: getQualityColor(comment.clarityRating || 3),
+                          background: difficulty === "hard" ? "var(--dark-gray)" : getQualityColor(comment.clarityRating || 3),
                           padding: "6px",
                           borderRadius: 0,
                           textAlign: "center",
@@ -431,7 +431,7 @@ const ProfessorCardRight = ({ prof, comments }) => (
                         }}
                       >
                         <div style={{ fontSize: "32px", fontWeight: 700, color: "var(--black)" }}>
-                          {comment.clarityRating?.toFixed(1) || "N/A"}
+                          {difficulty === "hard" ? "??" : (comment.clarityRating?.toFixed(1) || "N/A")}
                         </div>
                       </div>
                     </div>
@@ -453,7 +453,7 @@ const ProfessorCardRight = ({ prof, comments }) => (
                         }}
                       >
                         <div style={{ fontSize: "32px", fontWeight: 700, color: "var(--black)" }}>
-                          {comment.difficultyRating?.toFixed(1) || "N/A"}
+                          {difficulty === "hard" ? "??" : (comment.difficultyRating?.toFixed(1) || "N/A")}
                         </div>
                       </div>
                     </div>
@@ -616,7 +616,7 @@ const ProfessorCardRight = ({ prof, comments }) => (
 
         {/* Professors Comparison */}
         <div style={{ display: "grid", gridTemplateColumns: "1fr 200px 1fr", gap: 20, alignItems: "flex-start", marginBottom: 30 }}>
-          <ProfessorCard prof={leftProf} comments={leftComments} position="left" />
+          <ProfessorCard prof={leftProf} comments={leftComments} difficulty={difficulty} position="left" />
 
           {/* Buttons Center */}
           <div style={{
@@ -679,7 +679,7 @@ const ProfessorCardRight = ({ prof, comments }) => (
             </button>
           </div>
 
-          <ProfessorCardRight prof={rightProf} comments={rightComments} position="right" />
+          <ProfessorCardRight prof={rightProf} comments={rightComments} difficulty={difficulty} position="right" />
         </div>
       </div>
     </div>

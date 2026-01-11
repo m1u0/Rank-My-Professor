@@ -9,7 +9,7 @@
 
 import React, { useState, useMemo, useEffect, useRef } from "react";
 
-export default function GuessMode({ prof, onGuess, onExit, score, mode }) {
+export default function GuessMode({ prof, onGuess, onExit, score, mode, difficulty }) {
   const [guess, setGuess] = useState(3.0);
   const [submitted, setSubmitted] = useState(false);
   const [fillPercentage, setFillPercentage] = useState(0);
@@ -418,7 +418,7 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode }) {
                         <div style={{ fontSize: "11px", fontWeight: 600, color: "var(--black)" }}>QUALITY</div>
                         <div
                           style={{
-                            background: getQualityColor(comment.clarityRating || 3),
+                            background: difficulty === "hard" ? "var(--dark-gray)" : getQualityColor(comment.clarityRating || 3),
                             padding: "8px",
                             borderRadius: 0,
                             textAlign: "center",
@@ -431,7 +431,7 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode }) {
                           }}
                         >
                           <div style={{ fontSize: "36px", fontWeight: 700, color: "var(--black)" }}>
-                            {comment.clarityRating?.toFixed(1) || "N/A"}
+                            {difficulty === "hard" ? "??" : (comment.clarityRating?.toFixed(1) || "N/A")}
                           </div>
                         </div>
                       </div>
@@ -453,7 +453,7 @@ export default function GuessMode({ prof, onGuess, onExit, score, mode }) {
                           }}
                         >
                           <div style={{ fontSize: "36px", fontWeight: 700, color: "var(--black)" }}>
-                            {comment.difficultyRating?.toFixed(1) || "N/A"}
+                            {difficulty === "hard" ? "??" : (comment.difficultyRating?.toFixed(1) || "N/A")}
                           </div>
                         </div>
                       </div>
