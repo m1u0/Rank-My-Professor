@@ -1,6 +1,6 @@
 #root {
   min-height: 100vh;
-  background-color: var(--light-gray);
+  background-color: var(--white);
 }
 
 .app-container {

@@ -4,7 +4,7 @@ export default function StartScreen({ playerName, setPlayerName, onStart }) {
   const canStart = playerName.trim().length > 0;
 
   return (
-    <div style={{ background: "var(--light-gray)", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <div style={{ background: "var(--white)", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       {/* Header */}
       <div style={{
         background: "var(--black)",
@@ -37,10 +37,10 @@ export default function StartScreen({ playerName, setPlayerName, onStart }) {
         width: "100%"
       }}>
         <div style={{
-          background: "var(--white)",
+          background: "var(--light-gray)",
           borderRadius: 0,
           padding: 40,
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
+          //boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
           width: "100%"
         }}>
           <h1 style={{ 
@@ -92,7 +92,7 @@ export default function StartScreen({ playerName, setPlayerName, onStart }) {
             style={{
               width: "100%",
               padding: "14px 20px",
-              background: canStart ? "var(--primary-blue)" : "var(--light-gray)",
+              background: canStart ? "var(--primary-blue)" : "var(--dark-gray)",
               color: canStart ? "var(--white)" : "var(--black)",
               border: "none",
               borderRadius: 30,

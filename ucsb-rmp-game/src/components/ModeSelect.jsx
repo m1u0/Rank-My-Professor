@@ -18,10 +18,10 @@
 import React, { useState } from "react";
 import user_ava from "../assets/user_ava.svg";
 
-export default function ModeSelect({ playerName, setMode, difficulty, setDifficulty, onViewLeaderboard }) {
+export default function ModeSelect({ playerName, setMode, difficulty, setDifficulty, onViewLeaderboard, onSignOut }) {
   const [showGuessMenu, setShowGuessMenu] = useState(false);
   return (
-    <div style={{ background: "var(--light-gray)", minHeight: "100vh" }}>
+    <div style={{ background: "var(--white)", minHeight: "100vh" }}>
       {/* Header */}
 <div
   style={{
@@ -40,6 +40,24 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
     zIndex: 1000,
   }}
 >
+  {/* Sign Out button */}
+  <button
+    onClick={onSignOut}
+    style={{
+      position: "absolute",
+      left: 30,
+      background: "none",
+      border: "none",
+      color: "var(--white)",
+      fontSize: "20px",
+      cursor: "pointer",
+      padding: 0,
+      display: "flex",
+      alignItems: "center",
+    }}
+  >
+    ◀ Sign Out
+  </button>
   {/* Absolutely centered title */}
   <h1
     style={{
@@ -106,7 +124,7 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
                 onClick={() => setDifficulty(diff.value)}
                 style={{
                   padding: "12px 20px",
-                  background: difficulty === diff.value ? "var(--primary-blue)" : "var(--light-gray)",
+                  background: difficulty === diff.value ? "var(--primary-blue)" : "var(--white)",
                   color: difficulty === diff.value ? "var(--white)" : "var(--primary-blue)",
                   border: "1px solid " + (difficulty === diff.value ? "var(--primary-blue)" : "var(--primary-blue)"),
                   borderRadius: 30,
@@ -124,7 +142,7 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
                 }}
                 onMouseLeave={(e) => {
                   if (difficulty !== diff.value) {
-                    e.target.style.background = "var(--light-gray)";
+                    e.target.style.background = "var(--white)";
                     e.target.style.color = "var(--primary-blue)";
                     e.target.style.borderColor = "var(--primary-blue)";
                   }
@@ -139,27 +157,17 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
           {/* Guess Mode Card */}
           <div style={{
-            background: "var(--white)",
+            background: "var(--light-gray)",
             borderRadius: 0,
             padding: 24,
-            cursor: "pointer",
-            transition: "all 0.3s ease",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.08)"
+            cursor: "pointer"
           }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
-              e.currentTarget.style.transform = "translateY(-2px)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.08)";
-              e.currentTarget.style.transform = "translateY(0)";
-            }}
           >
             <h3 style={{ fontSize: "22px", fontWeight: 700, color: "var(--black)", margin: "0 0 12px 0" }}>
               Guess the Rating
             </h3>
             <p style={{ color: "var(--black)", lineHeight: "1.6", marginBottom: 20 }}>
-              Read student reviews and guess the professor's average rating. Choose a mode and play!
+              Read student reviews and guess the professor's average rating. Stay within half a point. Choose a mode and play!
             </p>
             <div style={{ position: "relative" }}>
               <button
@@ -175,7 +183,7 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
                   gap: 8
                 }}
               >
-                Play <span style={{ fontSize: 12 }}>▾</span>
+                Play <span style={{ fontSize: 12 }}>▼</span>
               </button>
 
               {showGuessMenu && (
@@ -201,7 +209,7 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
                       cursor: "pointer",
                       fontSize: 14
                     }}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = "var(--light-gray)"}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = "var(--dark-gray)"}
                     onMouseLeave={(e) => e.target.style.backgroundColor = "transparent"}
                   >
                     Arcade
@@ -218,7 +226,7 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
                       cursor: "pointer",
                       fontSize: 14
                     }}
-                    onMouseEnter={(e) => e.target.style.backgroundColor = "var(--light-gray)"}
+                    onMouseEnter={(e) => e.target.style.backgroundColor = "var(--dark-gray)"}
                     onMouseLeave={(e) => e.target.style.backgroundColor = "transparent"}
                   >
                     Best Out of 10
@@ -230,21 +238,11 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
 
           {/* Higher/Lower Mode Card */}
           <div style={{
-            background: "#ffffff",
+            background: "var(--light-gray)",
             borderRadius: 0,
             padding: 24,
-            cursor: "pointer",
-            transition: "all 0.3s ease",
-            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.08)"
+            cursor: "pointer"
           }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
-              e.currentTarget.style.transform = "translateY(-2px)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = "0 2px 4px rgba(0, 0, 0, 0.08)";
-              e.currentTarget.style.transform = "translateY(0)";
-            }}
           >
             <h3 style={{ fontSize: "22px", fontWeight: 700, color: "var(--black)", margin: "0 0 12px 0" }}>
               Higher or Lower
@@ -308,7 +306,7 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
               e.target.style.transform = "scale(1.05)";
             }}
             onMouseLeave={(e) => {
-              e.target.style.backgroundColor = "var(--light-gray)";
+              e.target.style.backgroundColor = "var(--white)";
               e.target.style.color = "var(--primary-blue)";
               e.target.style.borderColor = "var(--primary-blue)";
               e.target.style.transform = "scale(1)";

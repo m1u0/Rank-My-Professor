@@ -10,8 +10,8 @@
 import React from "react";
 
 const MODE_OPTIONS = [
-  { value: "guess", label: "Arcade: Guess the Rating" },
-  { value: "guess10", label: "Best Out of 10"},
+  { value: "guess", label: "Guess the Rating - Arcade" },
+  { value: "guess10", label: "Guess the Rating - Best Out of 10"},
   { value: "higherlower", label: "Higher or Lower" }
 ];
 
@@ -103,12 +103,23 @@ export default function Leaderboard({ playerName, onBack }) {
   const LeaderboardTable = ({ difficulty, title }) => {
     const sorted = [...(leaderboards[difficulty] || [])].sort((a, b) => b.score - a.score).slice(0, 10);
     const playerRank = meta[difficulty]?.playerRank;
+    const isNormal = difficulty === "normal";
+    const titleBgColor = isNormal ? "var(--dark-gray)" : "var(--red)";
 
     return (
-      <div style={{ flex: 1, minWidth: 280 }}>
-        <h3 style={{ marginBottom: 20, color: "var(--primary-blue)", fontSize: "18px", fontWeight: 700 }}>
-          {title}
-        </h3>
+      <div style={{ flex: 1, minWidth: 280, display: "flex", flexDirection: "column" }}>
+        <div
+          style={{
+            background: titleBgColor,
+            padding: "12px 16px",
+            marginBottom: 20,
+            borderRadius: 0,
+          }}
+        >
+          <h3 style={{ margin: 0, color: "var(--black)", fontSize: "24px", fontWeight: 700 }}>
+            {title}
+          </h3>
+        </div>
         {loading ? (
           <p style={{ color: "var(--muted-2)", textAlign: "center", padding: "40px 20px" }}>Loading leaderboard...</p>
         ) : error ? (
@@ -184,12 +195,12 @@ export default function Leaderboard({ playerName, onBack }) {
     MODE_OPTIONS.find((option) => option.value === selectedMode) || MODE_OPTIONS[0];
 
   return (
-    <div style={{ background: "var(--light-gray)", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <div style={{ background: "var(--white)", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
       {/* Header */}
       <div style={{
         background: "var(--black)",
         color: "var(--white)",
-        padding: "10px 30px",
+        padding: "8px 30px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -214,7 +225,7 @@ export default function Leaderboard({ playerName, onBack }) {
             alignItems: "center"
           }}
         >
-          ← Back
+          ◀ Back
         </button>
         <div style={{ flex: 1, textAlign: "center" }}>
           <h1 style={{ margin: 0, fontSize: "24px", fontWeight: 700 }}>Leaderboard</h1>
@@ -226,8 +237,8 @@ export default function Leaderboard({ playerName, onBack }) {
       <div style={{ flex: 1, maxWidth: 1200, margin: "0 auto", padding: "40px 30px", paddingTop: 80, width: "100%", boxSizing: "border-box" }}>
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 30 }}>
           <div>
-            <p style={{ margin: "0 0 6px 0", fontSize: "12px", color: "var(--muted-2)" }}>Showing leaderboards for</p>
-            <h2 style={{ margin: 0, fontSize: "22px", fontWeight: 700, color: "var(--black)" }}>
+            <p style={{ margin: "0 0 6px 0", fontSize: "16px", color: "var(--muted-2)" }}>Showing leaderboards for</p>
+            <h2 style={{ margin: 0, fontSize: "26px", fontWeight: 700, color: "var(--black)" }}>
                {selectedModeMeta.label}
             </h2>
           </div>
@@ -271,7 +282,7 @@ export default function Leaderboard({ playerName, onBack }) {
             <div
               key={difficulty.value}
               style={{
-                background: "var(--white)",
+                background: "var(--light-gray)",
                 borderRadius: 0,
                 padding: 24
               }}

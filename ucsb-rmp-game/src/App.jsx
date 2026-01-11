@@ -203,6 +203,7 @@ export default function App() {
         playerName={playerName} 
         setMode={setMode}
         onViewLeaderboard={() => setViewingLeaderboard(true)}
+        onSignOut={() => setStarted(false)}
       />
     );
   }

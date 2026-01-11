@@ -58,39 +58,6 @@ export default function GameOverModal({ mode, score, leftProf, rightProf, onRest
       zIndex: 1000,
       backdropFilter: "blur(4px)"
     }}>
-      {/* Header */}
-      <div style={{
-        background: "var(--black)",
-        color: "var(--white)",
-        padding: "10px 30px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        width: "100%",
-        boxSizing: "border-box",
-        position: "sticky",
-        top: 0,
-        zIndex: 1000
-      }}>
-        <button
-          onClick={onGoBackToMenu}
-          style={{
-            background: "none",
-            border: "none",
-            color: "var(--white)",
-            fontSize: "20px",
-            cursor: "pointer",
-            padding: 0,
-            display: "flex",
-            alignItems: "center"
-          }}
-        >
-          ← Back
-        </button>
-        <h2 style={{ margin: 0, fontSize: "24px", fontWeight: 700, flex: 1, textAlign: "center" }}>Game Over 🎓</h2>
-        <div style={{ width: 60 }} />
-      </div>
-
       <div style={{
         flex: 1,
         display: "flex",
@@ -109,8 +76,9 @@ export default function GameOverModal({ mode, score, leftProf, rightProf, onRest
         maxHeight: "90vh",
         overflowY: "auto"
       }}>
-        <p style={{ margin: "0 0 24px 0", color: "var(--black)", fontSize: "16px" }}>
-          Your Score: <span style={{ fontSize: "32px", fontWeight: 700, color: "var(--primary-blue)" }}>{score}</span>
+        <h2 style={{ margin: "0 0 24px 0", fontSize: "60px", fontWeight: 700, color: "var(--black)" }}>Game Over</h2>
+        <p style={{ margin: "0 0 24px 0", color: "var(--black)", fontWeight: 600, fontSize: "32px" }}>
+          Your Score: <span style={{ fontSize: "40px", fontWeight: 700, color: "var(--primary-blue)" }}>{score}</span>
         </p>
 
         {mode === "guess" && leftProf && (

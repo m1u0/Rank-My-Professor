@@ -11,7 +11,7 @@
   --red: #ff9c9d;
   --yellow: #fff271;
   color: var(--black);
-  background-color: var(--light-gray);
+  background-color: var(--white);
 }
 
 * {
@@ -23,7 +23,7 @@ body {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--light-gray);
+  background-color: var(--white);
   color: var(--black);
 }
 

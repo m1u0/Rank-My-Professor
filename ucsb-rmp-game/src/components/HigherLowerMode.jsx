@@ -228,8 +228,10 @@ export default function HigherLowerMode({
           display: "flex",
           flexDirection: "column",
           cursor: "pointer",
-          border: isHovered ? "5px solid var(--primary-blue)" : "5px solid transparent",
-          transition: "border 0.2s ease",
+          border: "1px solid var(--dark-gray)",
+          boxShadow: isHovered ? "0 0 0 4px var(--primary-blue)" : "none",
+          transform: isHovered ? "scale(1.01)" : "scale(1)",
+          transition: "box-shadow 0.2s ease, transform 0.2s ease",
         }}
       >
         <h3
@@ -555,8 +557,10 @@ export default function HigherLowerMode({
           display: "flex",
           flexDirection: "column",
           cursor: "pointer",
-          border: isHovered ? "5px solid var(--primary-blue)" : "5px solid transparent",
-          transition: "border 0.2s ease",
+          border: "1px solid var(--dark-gray)",
+          boxShadow: isHovered ? "0 0 0 4px var(--primary-blue)" : "none",
+          transform: isHovered ? "scale(1.01)" : "scale(1)",
+          transition: "box-shadow 0.2s ease, transform 0.2s ease",
         }}
       >
         <h3
@@ -871,7 +875,7 @@ export default function HigherLowerMode({
   return (
     <div
       style={{
-        background: "var(--light-gray)",
+        background: "var(--white)",
         minHeight: "100vh",
         paddingBottom: 40,
         display: "flex",
@@ -894,7 +898,7 @@ export default function HigherLowerMode({
         height={typeof window !== "undefined" ? window.innerHeight : 0}
       />
 
-      {/* Success Message Overlay */}
+      {/* Success Message Overlay
       {showCorrect && (
         <div
           style={{
@@ -927,7 +931,7 @@ export default function HigherLowerMode({
             }
           `}</style>
         </div>
-      )}
+      )} */}
 
       {/* Incorrect Message Overlay */}
       {showIncorrect && (
@@ -938,7 +942,7 @@ export default function HigherLowerMode({
             left: "50%",
             transform: "translate(-50%, -50%)",
             background: "var(--red)",
-            color: "var(--white)",
+            color: "var(--black)",
             padding: "30px 60px",
             borderRadius: 12,
             fontSize: "32px",
@@ -948,7 +952,7 @@ export default function HigherLowerMode({
             boxShadow: "0 10px 40px rgba(0, 0, 0, 0.3)",
           }}
         >
-          ✗ Incorrect! ✗
+          Incorrect
           <style>{`
             @keyframes scaleIn {
               from {
@@ -997,7 +1001,7 @@ export default function HigherLowerMode({
             alignItems: "center",
           }}
         >
-          ← Back
+          ◀ Back
         </button>
         {/* Absolutely centered title */}
         <h1

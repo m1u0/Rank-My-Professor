@@ -24,9 +24,11 @@ export default function GuessMode({
   const [fillPercentage, setFillPercentage] = useState(0);
   const [isCorrect, setIsCorrect] = useState(false);
   const [isIncorrect, setIsIncorrect] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
   const canvasRef = useRef(null);
   const shakeElementRef = useRef(null);
   const submittedProfIdRef = useRef(null);
+  const sliderBarRef = useRef(null);
 
   if (!prof) return null;
 
@@ -232,10 +234,53 @@ export default function GuessMode({
     }, delay);
   };
 
+  const updateGuessFromPosition = (clientX) => {
+    if (!sliderBarRef.current || submitted) return;
+    const rect = sliderBarRef.current.getBoundingClientRect();
+    const clickX = clientX - rect.left;
+    const percentage = Math.max(0, Math.min(1, clickX / rect.width));
+    const newValue = 1 + percentage * 4; // Map 0-1 to 1-5
+    setGuess(Math.round(newValue * 10) / 10); // Round to 1 decimal
+  };
+
+  const handleMouseDown = (e) => {
+    if (submitted) return;
+    e.preventDefault();
+    setIsDragging(true);
+    updateGuessFromPosition(e.clientX);
+  };
+
+  // Add global mouse event listeners for dragging
+  useEffect(() => {
+    if (!isDragging) return;
+
+    const handleMouseMove = (e) => {
+      if (submitted) return;
+      if (!sliderBarRef.current) return;
+      const rect = sliderBarRef.current.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const percentage = Math.max(0, Math.min(1, clickX / rect.width));
+      const newValue = 1 + percentage * 4; // Map 0-1 to 1-5
+      setGuess(Math.round(newValue * 10) / 10); // Round to 1 decimal
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mouseup", handleMouseUp);
+    
+    return () => {
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging, submitted]);
+
   return (
     <div
       style={{
-        background: "var(--light-gray)",
+        background: "var(--white)",
         minHeight: "100vh",
         paddingBottom: 40,
         display: "flex",
@@ -258,7 +303,7 @@ export default function GuessMode({
         height={typeof window !== "undefined" ? window.innerHeight : 0}
       />
 
-      {/* Success Message Overlay */}
+      {/* Success Message Overlay
       {isCorrect && (
         <div
           style={{
@@ -267,7 +312,7 @@ export default function GuessMode({
             left: "50%",
             transform: "translate(-50%, -50%)",
             background: "var(--green)",
-            color: "var(--white)",
+            color: "var(--black)",
             padding: "30px 60px",
             borderRadius: 12,
             fontSize: "32px",
@@ -277,7 +322,7 @@ export default function GuessMode({
             boxShadow: "0 10px 40px rgba(0, 0, 0, 0.3)",
           }}
         >
-          ✨ Correct! ✨
+          Correct
           <style>{`
             @keyframes scaleIn {
               from {
@@ -291,7 +336,7 @@ export default function GuessMode({
             }
           `}</style>
         </div>
-      )}
+      )} */}
 
       {/* Incorrect Message Overlay */}
       {isIncorrect && (
@@ -302,7 +347,7 @@ export default function GuessMode({
             left: "50%",
             transform: "translate(-50%, -50%)",
             background: "var(--red)",
-            color: "var(--white)",
+            color: "var(--black)",
             padding: "30px 60px",
             borderRadius: 12,
             fontSize: "32px",
@@ -312,7 +357,7 @@ export default function GuessMode({
             boxShadow: "0 10px 40px rgba(0, 0, 0, 0.3)",
           }}
         >
-          ✗ Incorrect! ✗
+          Incorrect
           <style>{`
             @keyframes scaleIn {
               from {
@@ -362,7 +407,7 @@ export default function GuessMode({
             alignItems: "center",
           }}
         >
-          ← Back
+          ◀ Back
         </button>
         {/* Absolutely centered title */}
         <h1
@@ -428,27 +473,13 @@ export default function GuessMode({
         <div
           style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 30 }}
         >
-          {/* Score - Left Aligned */}
+          {/* Left Column */}
           <div
             style={{
               display: "flex",
               flexDirection: "column",
             }}
           >
-            <div
-              style={{
-                fontSize: "16px",
-                fontWeight: 600,
-                color: "var(--black)",
-                marginBottom: "20px",
-              }}
-            >
-              Score:{" "}
-              <span style={{ color: "var(--primary-blue)", fontSize: "18px" }}>
-                {score}
-              </span>
-            </div>
-
             {/* Professor Info & Reviews */}
             <div
               style={{
@@ -489,8 +520,6 @@ export default function GuessMode({
               </h4>
               <div
                 style={{
-                  maxHeight: "450px",
-                  overflowY: "auto",
                   paddingRight: 8,
                 }}
               >
@@ -805,16 +834,20 @@ export default function GuessMode({
               flexDirection: "column",
             }}
           >
-            <h3
+            {/* Score at the top */}
+            <div
               style={{
-                margin: "0 0 24px 0",
-                fontSize: "24px",
-                fontWeight: 700,
+                fontSize: "32px",
+                fontWeight: 600,
                 color: "var(--black)",
+                marginBottom: "24px",
               }}
             >
-              What's the rating?
-            </h3>
+              Score:{" "}
+              <span style={{ color: "var(--primary-blue)", fontSize: "40px" }}>
+                {score}
+              </span>
+            </div>
 
             <div style={{ flex: 1 }}>
               <div
@@ -822,55 +855,150 @@ export default function GuessMode({
                   background: "var(--light-gray)",
                   padding: 24,
                   borderRadius: 0,
-                  textAlign: "center",
                   marginBottom: 24,
                 }}
               >
-                <p
+                <div
                   style={{
-                    margin: "0 0 8px 0",
-                    fontSize: "12px",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    marginBottom: 24,
+                  }}
+                >
+                  <span
+                    style={{
+                      fontSize: "32px",
+                      fontWeight: 700,
+                      color: "var(--black)",
+                      marginRight: "24px",
+                    }}
+                  >
+                    Your Guess:
+                  </span>
+                  <span
+                    style={{
+                      fontSize: "48px",
+                      fontWeight: 700,
+                      color: "var(--primary-blue)",
+                      marginLeft: "auto",
+                    }}
+                  >
+                    {parseFloat(guess).toFixed(1)}
+                  </span>
+                </div>
+
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: 16,
+                    fontSize: "14px",
+                    fontWeight: 600,
                     color: "var(--black)",
                   }}
                 >
-                  Your Guess
-                </p>
-                <p
-                  style={{
-                    margin: 0,
-                    fontSize: "48px",
-                    fontWeight: 700,
-                    color: "var(--primary-blue)",
-                  }}
-                >
-                  {parseFloat(guess).toFixed(1)}
-                </p>
-                <p
-                  style={{
-                    margin: "8px 0 0 0",
-                    fontSize: "18px",
-                    color: "var(--yellow)",
-                  }}
-                >
-                  {"⭐".repeat(Math.floor(parseFloat(guess)))}
-                </p>
-              </div>
+                  Adjust Rating (Slider)
+                </label>
 
-              {/* Animated green bar showing correct rating */}
-              {submitted && (
-                <div style={{ marginBottom: 24 }}>
-                  <div
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 12,
+                  }}
+                >
+                  <span
                     style={{
-                      background: "var(--light-gray)",
-                      padding: 24,
-                      borderRadius: 0,
-                      marginBottom: 24,
+                      fontSize: "24px",
+                      fontWeight: 600,
+                      color: "var(--black)",
+                      minWidth: 24,
+                      textAlign: "center",
                     }}
                   >
+                    1
+                  </span>
+                  <div
+                    ref={sliderBarRef}
+                    onMouseDown={handleMouseDown}
+                    onClick={(e) => {
+                      if (submitted || isDragging) return;
+                      updateGuessFromPosition(e.clientX);
+                    }}
+                    style={{
+                      position: "relative",
+                      flex: 1,
+                      height: 40,
+                      background: "var(--dark-gray)",
+                      borderRadius: 0,
+                      overflow: "hidden",
+                      cursor: submitted ? "not-allowed" : "pointer",
+                      opacity: submitted ? 0.5 : 1,
+                      userSelect: "none",
+                      WebkitUserSelect: "none",
+                    }}
+                  >
+                    <div
+                      style={{
+                        position: "absolute",
+                        left: 0,
+                        top: 0,
+                        height: "100%",
+                        background: "var(--primary-blue)",
+                        width: `${((parseFloat(guess) - 1) / 4) * 100}%`,
+                      }}
+                    />
+                  </div>
+                  <span
+                    style={{
+                      fontSize: "24px",
+                      fontWeight: 600,
+                      color: "var(--black)",
+                      minWidth: 24,
+                      textAlign: "center",
+                    }}
+                  >
+                    5
+                  </span>
+                </div>
+
+                <div style={{ display: "flex", gap: 12, marginTop: 24 }}>
+                  <button
+                    onClick={handleSubmit}
+                    disabled={submitted}
+                    style={{
+                      flex: 1,
+                      padding: "14px 20px",
+                      background: "var(--primary-blue)",
+                      color: "var(--white)",
+                      border: "none",
+                      borderRadius: 30,
+                      cursor: submitted ? "not-allowed" : "pointer",
+                      fontSize: "16px",
+                      fontWeight: 600,
+                      transition: "all 0.2s",
+                    }}
+                    onMouseEnter={(e) => {
+                      e.target.style.backgroundColor = "var(--dark-blue)";
+                      e.target.style.transform = "scale(1.05)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.target.style.backgroundColor = "var(--primary-blue)";
+                      e.target.style.transform = "scale(1)";
+                    }}
+                  >
+                    {submitted ? "Submitted" : "Submit Answer"}
+                  </button>
+                </div>
+
+                {/* Animated green bar showing correct rating */}
+                {submitted && (
+                  <div style={{ marginTop: 24 }}>
                     <p
                       style={{
                         margin: "0 0 12px 0",
-                        fontSize: "12px",
+                        fontSize: "14px",
+                        fontWeight: 600,
                         color: "var(--black)",
                       }}
                     >
@@ -882,7 +1010,7 @@ export default function GuessMode({
                         width: "100%",
                         height: 40,
                         background: "var(--light-gray)",
-                        borderRadius: 4,
+                        borderRadius: 0,
                         overflow: "hidden",
                       }}
                     >
@@ -901,110 +1029,15 @@ export default function GuessMode({
                           paddingRight: 12,
                           fontSize: "18px",
                           fontWeight: 700,
-                          color: "var(--white)",
+                          color: "var(--black)",
                         }}
                       >
                         {fillPercentage > 10 && `${prof.rating.toFixed(1)}`}
                       </div>
                     </div>
                   </div>
-                </div>
-              )}
-
-              <label
-                style={{
-                  display: "block",
-                  marginBottom: 16,
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  color: "var(--black)",
-                }}
-              >
-                Adjust Rating
-              </label>
-
-              <input
-                type="range"
-                min="1"
-                max="5"
-                step="0.1"
-                value={guess}
-                onChange={(e) => setGuess(e.target.value)}
-                disabled={submitted}
-                style={{
-                  width: "100%",
-                  height: 6,
-                  cursor: "pointer",
-                  background: "var(--light-gray)",
-                  borderRadius: 3,
-                  WebkitAppearance: "none",
-                  appearance: "none",
-                  opacity: submitted ? 0.5 : 1,
-                }}
-              />
-              <style>{`
-                input[type="range"]::-webkit-slider-thumb {
-                  appearance: none;
-                  width: 24px;
-                  height: 24px;
-                  border-radius: 50%;
-                  background: var(--primary-blue);
-                  cursor: pointer;
-                  box-shadow: 0 2px 4px rgba(0, 85, 253, 0.3);
-                }
-                input[type="range"]::-moz-range-thumb {
-                  width: 24px;
-                  height: 24px;
-                  border-radius: 50%;
-                  background: var(--primary-blue);
-                  cursor: pointer;
-                  border: none;
-                  box-shadow: 0 2px 4px rgba(0, 85, 253, 0.3);
-                }
-              `}</style>
-
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  fontSize: "12px",
-                  color: "var(--black)",
-                  marginTop: 8,
-                  marginBottom: 24,
-                }}
-              >
-                <span>1</span>
-                <span>5</span>
+                )}
               </div>
-            </div>
-
-            <div style={{ display: "flex", gap: 12 }}>
-              <button
-                onClick={handleSubmit}
-                disabled={submitted}
-                style={{
-                  flex: 1,
-                  padding: "14px 20px",
-                  background: "var(--primary-blue)",
-                  color: "var(--white)",
-                  border: "none",
-                  borderRadius: 30,
-                  cursor: submitted ? "not-allowed" : "pointer",
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  transition: "all 0.2s",
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = "var(--dark-blue)";
-                  e.target.style.transform = "scale(1.05)";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = "var(--primary-blue)";
-                  e.target.style.transform = "scale(1)";
-                }}
-              >
-                {submitted ? "Submitted" : "Submit Answer"}
-              </button>
             </div>
           </div>
         </div>
