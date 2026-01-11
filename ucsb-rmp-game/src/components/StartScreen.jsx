@@ -9,7 +9,7 @@ export default function StartScreen({ playerName, setPlayerName, onStart }) {
       <div style={{
         background: "var(--black)",
         color: "var(--white)",
-        padding: "10px 30px",
+        padding: "8px 30px",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",

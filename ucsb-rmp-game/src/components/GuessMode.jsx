@@ -8,6 +8,7 @@
 */
 
 import React, { useState, useMemo, useEffect, useRef } from "react";
+import user_ava from "../assets/user_ava.svg";
 
 export default function GuessMode({
   prof,
@@ -16,6 +17,7 @@ export default function GuessMode({
   score,
   mode,
   difficulty,
+  playerName,
 }) {
   const [guess, setGuess] = useState(3.0);
   const [submitted, setSubmitted] = useState(false);
@@ -329,24 +331,27 @@ export default function GuessMode({
       {/* Header */}
       <div
         style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
           background: "var(--black)",
           color: "var(--white)",
           padding: "10px 30px",
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           width: "100%",
           boxSizing: "border-box",
-          position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
           zIndex: 1000,
         }}
       >
+        {/* Back button */}
         <button
           onClick={onExit}
           style={{
+            position: "absolute",
+            left: 30,
             background: "none",
             border: "none",
             color: "var(--white)",
@@ -359,18 +364,51 @@ export default function GuessMode({
         >
           ← Back
         </button>
-        <h2
+        {/* Absolutely centered title */}
+        <h1
           style={{
+            position: "absolute",
+            left: "50%",
+            transform: "translateX(-50%)",
             margin: 0,
             fontSize: "24px",
             fontWeight: 700,
-            flex: 1,
-            textAlign: "center",
+            whiteSpace: "nowrap"
           }}
         >
           Guess the Rating
-        </h2>
-        <div style={{ width: 60 }} />
+        </h1>
+        {/* Right-side user info */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8
+          }}
+        >
+          <img
+            src={user_ava}
+            alt="avatar"
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: "50%"
+            }}
+          />
+          <span
+            style={{
+              fontSize: "16px",
+              fontWeight: 500,
+              maxWidth: 120,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis"
+            }}
+            title={playerName}
+          >
+            {playerName}
+          </span>
+        </div>
       </div>
 
       {/* Content */}

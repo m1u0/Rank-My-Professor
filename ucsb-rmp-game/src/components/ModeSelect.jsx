@@ -25,13 +25,19 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
       {/* Header */}
 <div
   style={{
-    position: "relative",
+    position: "fixed",
+    top: 0,
+    left: 0,
+    right: 0,
     background: "var(--black)",
     color: "var(--white)",
     padding: "10px 30px",
     display: "flex",
     alignItems: "center",
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
+    width: "100%",
+    boxSizing: "border-box",
+    zIndex: 1000,
   }}
 >
   {/* Absolutely centered title */}
@@ -84,7 +90,7 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
 
 
       {/* Content */}
-      <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 30px" }}>
+      <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 30px", paddingTop: 80 }}>
         {/* Difficulty Selector */}
         <div style={{ marginBottom: 40, textAlign: "center" }}>
           <h3 style={{ fontSize: "18px", fontWeight: 600, color: "var(--black)", marginBottom: 16 }}>

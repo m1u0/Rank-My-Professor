@@ -7,7 +7,8 @@
   - Avoid adding new hex colors; update `src/index.css` if the palette must change.
 */
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
+import user_ava from "../assets/user_ava.svg";
 
 export default function HigherLowerMode({
   leftProf,
@@ -16,9 +17,11 @@ export default function HigherLowerMode({
   onExit,
   score,
   difficulty,
+  playerName,
 }) {
   const [showCorrect, setShowCorrect] = useState(false);
   const [showIncorrect, setShowIncorrect] = useState(false);
+  const [hoveredCard, setHoveredCard] = useState(null); // 'left' or 'right'
   const canvasRef = useRef(null);
   const shakeElementRef = useRef(null);
   const lastChoiceRef = useRef(null);
@@ -163,12 +166,21 @@ export default function HigherLowerMode({
     animate();
   };
 
-  const handleChoice = (choice) => {
-    lastChoiceRef.current = choice;
-    const correct =
-      choice === "higher"
-        ? leftProf.rating >= rightProf.rating
-        : leftProf.rating <= rightProf.rating;
+  const handleChoice = (side) => {
+    // side is 'left' or 'right'
+    lastChoiceRef.current = side;
+    
+    // Convert card click to "higher"/"lower" for parent API
+    // Clicking left card means user thinks left is higher (pass "higher")
+    // Clicking right card means user thinks right is higher, so left is lower (pass "lower")
+    const choiceForParent = side === "left" ? "higher" : "lower";
+    
+    // Check correctness using the same logic as parent component
+    // Parent checks: if "higher" then leftProf.rating > rightProf.rating
+    // Parent checks: if "lower" then leftProf.rating < rightProf.rating
+    const correct = choiceForParent === "higher"
+      ? leftProf.rating > rightProf.rating
+      : leftProf.rating < rightProf.rating;
 
     if (correct) {
       setShowCorrect(true);
@@ -176,7 +188,7 @@ export default function HigherLowerMode({
       createConfetti();
       setTimeout(() => {
         setShowCorrect(false);
-        onChoose(choice);
+        onChoose(choiceForParent);
       }, 500);
     } else {
       setShowIncorrect(true);
@@ -187,17 +199,27 @@ export default function HigherLowerMode({
         setShowIncorrect(false);
       }, 1500);
       setTimeout(() => {
-        onChoose(choice);
+        onChoose(choiceForParent);
       }, 2000);
     }
   };
 
-  const leftComments = getRandomComments(leftProf);
-  const rightComments = getRandomComments(rightProf);
+  // Memoize comments so they don't regenerate on hover state changes
+  const leftComments = useMemo(
+    () => getRandomComments(leftProf),
+    [leftProf?.id, leftProf?.ratings?.length]
+  );
+  const rightComments = useMemo(
+    () => getRandomComments(rightProf),
+    [rightProf?.id, rightProf?.ratings?.length]
+  );
 
-  const ProfessorCard = ({ prof, comments, difficulty }) => (
+  const ProfessorCard = ({ prof, comments, difficulty, onClick, isHovered }) => (
     <div style={{ flex: 1 }}>
       <div
+        onClick={onClick}
+        onMouseEnter={() => setHoveredCard("left")}
+        onMouseLeave={() => setHoveredCard(null)}
         style={{
           background: "var(--white)",
           borderRadius: 0,
@@ -205,6 +227,9 @@ export default function HigherLowerMode({
           height: "100%",
           display: "flex",
           flexDirection: "column",
+          cursor: "pointer",
+          border: isHovered ? "5px solid var(--primary-blue)" : "5px solid transparent",
+          transition: "border 0.2s ease",
         }}
       >
         <h3
@@ -224,37 +249,8 @@ export default function HigherLowerMode({
             color: "var(--black)",
           }}
         >
-          {prof.department}
+          Department: {prof.department}
         </p>
-
-        <div
-          style={{
-            background: "var(--light-gray)",
-            padding: 12,
-            borderRadius: 0,
-            marginBottom: 16,
-          }}
-        >
-          <p
-            style={{
-              margin: "0 0 4px 0",
-              fontSize: "12px",
-              color: "var(--black)",
-            }}
-          >
-            Rating
-          </p>
-          <p
-            style={{
-              margin: 0,
-              fontSize: "24px",
-              fontWeight: 700,
-              color: "var(--primary-blue)",
-            }}
-          >
-            {prof.rating.toFixed(1)} ⭐
-          </p>
-        </div>
 
         <h4
           style={{
@@ -545,9 +541,12 @@ export default function HigherLowerMode({
       </div>
     </div>
   );
-  const ProfessorCardRight = ({ prof, comments, difficulty }) => (
+  const ProfessorCardRight = ({ prof, comments, difficulty, onClick, isHovered }) => (
     <div style={{ flex: 1 }}>
       <div
+        onClick={onClick}
+        onMouseEnter={() => setHoveredCard("right")}
+        onMouseLeave={() => setHoveredCard(null)}
         style={{
           background: "var(--white)",
           borderRadius: 0,
@@ -555,6 +554,9 @@ export default function HigherLowerMode({
           height: "100%",
           display: "flex",
           flexDirection: "column",
+          cursor: "pointer",
+          border: isHovered ? "5px solid var(--primary-blue)" : "5px solid transparent",
+          transition: "border 0.2s ease",
         }}
       >
         <h3
@@ -574,37 +576,8 @@ export default function HigherLowerMode({
             color: "var(--black)",
           }}
         >
-          {prof.department}
+          Department: {prof.department}
         </p>
-
-        <div
-          style={{
-            background: "var(--light-gray)",
-            padding: 12,
-            borderRadius: 0,
-            marginBottom: 16,
-          }}
-        >
-          <p
-            style={{
-              margin: "0 0 4px 0",
-              fontSize: "12px",
-              color: "var(--black)",
-            }}
-          >
-            Rating
-          </p>
-          <p
-            style={{
-              margin: 0,
-              fontSize: "24px",
-              fontWeight: 700,
-              color: "var(--primary-blue)",
-            }}
-          >
-            ?? ⭐
-          </p>
-        </div>
 
         <h4
           style={{
@@ -993,19 +966,27 @@ export default function HigherLowerMode({
       {/* Header */}
       <div
         style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          right: 0,
           background: "var(--black)",
           color: "var(--white)",
           padding: "10px 30px",
           display: "flex",
           alignItems: "center",
-          justifyContent: "space-between",
+          justifyContent: "flex-end",
           width: "100%",
           boxSizing: "border-box",
+          zIndex: 1000,
         }}
       >
+        {/* Back button */}
         <button
           onClick={onExit}
           style={{
+            position: "absolute",
+            left: 30,
             background: "none",
             border: "none",
             color: "var(--white)",
@@ -1018,18 +999,51 @@ export default function HigherLowerMode({
         >
           ← Back
         </button>
-        <h2
+        {/* Absolutely centered title */}
+        <h1
           style={{
+            position: "absolute",
+            left: "50%",
+            transform: "translateX(-50%)",
             margin: 0,
             fontSize: "24px",
             fontWeight: 700,
-            flex: 1,
-            textAlign: "center",
+            whiteSpace: "nowrap"
           }}
         >
           Higher or Lower?
-        </h2>
-        <div style={{ width: 60 }} />
+        </h1>
+        {/* Right-side user info */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8
+          }}
+        >
+          <img
+            src={user_ava}
+            alt="avatar"
+            style={{
+              width: 32,
+              height: 32,
+              borderRadius: "50%"
+            }}
+          />
+          <span
+            style={{
+              fontSize: "16px",
+              fontWeight: 500,
+              maxWidth: 120,
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis"
+            }}
+            title={playerName}
+          >
+            {playerName}
+          </span>
+        </div>
       </div>
 
       {/* Content */}
@@ -1040,22 +1054,24 @@ export default function HigherLowerMode({
           maxWidth: 1200,
           margin: "0 auto",
           padding: "30px",
+          paddingTop: 80,
           width: "100%",
           boxSizing: "border-box",
           transition: "transform 0.05s linear",
         }}
       >
-        {/* Score - Top Left */}
+        {/* Score - Centered */}
         <div
           style={{
-            fontSize: "16px",
+            fontSize: "32px",
             fontWeight: 600,
             color: "var(--black)",
-            marginBottom: "20px",
+            marginBottom: "30px",
+            textAlign: "center",
           }}
         >
           Score:{" "}
-          <span style={{ color: "var(--primary-blue)", fontSize: "18px" }}>
+          <span style={{ color: "var(--primary-blue)", fontSize: "40px" }}>
             {score}
           </span>
         </div>
@@ -1064,8 +1080,8 @@ export default function HigherLowerMode({
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr 200px 1fr",
-            gap: 20,
+            gridTemplateColumns: "1fr 1fr",
+            gap: 40,
             alignItems: "flex-start",
             marginBottom: 30,
           }}
@@ -1074,77 +1090,16 @@ export default function HigherLowerMode({
             prof={leftProf}
             comments={leftComments}
             difficulty={difficulty}
-            position="left"
+            onClick={() => handleChoice("left")}
+            isHovered={hoveredCard === "left"}
           />
-
-          {/* Buttons Center */}
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 12,
-              justifyContent: "flex-start",
-              paddingTop: 24,
-            }}
-          >
-            <button
-              onClick={() => handleChoice("higher")}
-              style={{
-                padding: "12px 16px",
-                background: "var(--primary-blue)",
-                color: "var(--white)",
-                border: "none",
-                borderRadius: 30,
-                cursor: "pointer",
-                fontSize: "14px",
-                fontWeight: 600,
-                transition: "all 0.2s",
-                whiteSpace: "nowrap",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = "var(--dark-blue)";
-                e.target.style.transform = "scale(1.05)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = "var(--primary-blue)";
-                e.target.style.transform = "scale(1)";
-              }}
-            >
-              ⬆️ Higher
-            </button>
-
-            <button
-              onClick={() => handleChoice("lower")}
-              style={{
-                padding: "12px 16px",
-                background: "var(--primary-blue)",
-                color: "var(--white)",
-                border: "none",
-                borderRadius: 30,
-                cursor: "pointer",
-                fontSize: "14px",
-                fontWeight: 600,
-                transition: "all 0.2s",
-                whiteSpace: "nowrap",
-              }}
-              onMouseEnter={(e) => {
-                e.target.style.backgroundColor = "var(--dark-blue)";
-                e.target.style.transform = "scale(1.05)";
-              }}
-              onMouseLeave={(e) => {
-                e.target.style.backgroundColor = "var(--primary-blue)";
-                e.target.style.transform = "scale(1)";
-              }}
-            >
-              ⬇️ Lower
-            </button>
-          </div>
 
           <ProfessorCardRight
             prof={rightProf}
             comments={rightComments}
             difficulty={difficulty}
-            position="right"
+            onClick={() => handleChoice("right")}
+            isHovered={hoveredCard === "right"}
           />
         </div>
       </div>
