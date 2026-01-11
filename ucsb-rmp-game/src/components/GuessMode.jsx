@@ -322,10 +322,16 @@ export default function GuessMode({ prof, onGuess, onExit, score, difficulty }) 
                   cursor: submitted ? "not-allowed" : "pointer",
                   fontSize: "16px",
                   fontWeight: 600,
-                  transition: "background-color 0.2s"
+                  transition: "all 0.2s"
                 }}
-                onMouseEnter={(e) => e.target.style.backgroundColor = "var(--dark-blue)"}
-                onMouseLeave={(e) => e.target.style.backgroundColor = "var(--primary-blue)"}
+                onMouseEnter={(e) => {
+                  e.target.style.backgroundColor = "var(--dark-blue)";
+                  e.target.style.transform = "scale(1.05)";
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.backgroundColor = "var(--primary-blue)";
+                  e.target.style.transform = "scale(1)";
+                }}
               >
                 {submitted ? "Submitted" : "Submit Answer"}
               </button>

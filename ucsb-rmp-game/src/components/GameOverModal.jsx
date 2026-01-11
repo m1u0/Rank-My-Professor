@@ -186,10 +186,16 @@ export default function GameOverModal({ mode, score, leftProf, rightProf, onRest
               borderRadius: 30,
               cursor: "pointer",
               fontWeight: 600,
-              transition: "background-color 0.2s"
+              transition: "all 0.2s"
             }}
-            onMouseEnter={(e) => e.target.style.backgroundColor = "var(--dark-blue)"}
-            onMouseLeave={(e) => e.target.style.backgroundColor = "var(--primary-blue)"}
+            onMouseEnter={(e) => {
+              e.target.style.backgroundColor = "var(--dark-blue)";
+              e.target.style.transform = "scale(1.05)";
+            }}
+            onMouseLeave={(e) => {
+              e.target.style.backgroundColor = "var(--primary-blue)";
+              e.target.style.transform = "scale(1)";
+            }}
           >
             Play Again
           </button>
@@ -210,11 +216,13 @@ export default function GameOverModal({ mode, score, leftProf, rightProf, onRest
               e.target.style.backgroundColor = "var(--dark-blue)";
               e.target.style.color = "var(--white)";
               e.target.style.borderColor = "var(--dark-blue)";
+              e.target.style.transform = "scale(1.05)";
             }}
             onMouseLeave={(e) => {
               e.target.style.backgroundColor = "var(--light-gray)";
               e.target.style.color = "var(--primary-blue)";
               e.target.style.borderColor = "var(--primary-blue)";
+              e.target.style.transform = "scale(1)";
             }}
           >
             Back to Menu
