@@ -314,7 +314,8 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
                     </div>
                     <div style={{ fontSize: "12px", color: "var(--muted)", lineHeight: "1.4" }}>
                       {difficulty !== "hard" && <span>Grade: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{comment.grade || "N/A"}</span> &nbsp;&nbsp;</span>}
-                      Textbook: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{comment.textbook || "N/A"}</span>
+                      {difficulty === "hard" && <span>Grade: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>??</span> &nbsp;&nbsp;</span>}
+                      Textbook: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{difficulty === "hard" ? "??" : (comment.textbook || "N/A")}</span>
                     </div>
                   </div>
 
@@ -469,7 +470,8 @@ const ProfessorCardRight = ({ prof, comments, difficulty }) => (
                     </div>
                     <div style={{ fontSize: "12px", color: "var(--muted)", lineHeight: "1.4" }}>
                       {difficulty !== "hard" && <span>Grade: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{comment.grade || "N/A"}</span> &nbsp;&nbsp;</span>}
-                      Textbook: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{comment.textbook || "N/A"}</span>
+                      {difficulty === "hard" && <span>Grade: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>??</span> &nbsp;&nbsp;</span>}
+                      Textbook: <span style={{ fontWeight: 600, color: "var(--black)", fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>{difficulty === "hard" ? "??" : (comment.textbook || "N/A")}</span>
                     </div>
                   </div>
 
