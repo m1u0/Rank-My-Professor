@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 
 export default function GuessMode({ prof, onGuess, onExit, score, difficulty }) {
-  const [guess, setGuess] = useState(2.5);
+  const [guess, setGuess] = useState(3.0);
   const [submitted, setSubmitted] = useState(false);
   const [fillPercentage, setFillPercentage] = useState(0);
 
