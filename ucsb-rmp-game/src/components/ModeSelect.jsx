@@ -100,11 +100,11 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
                 key={diff.value}
                 onClick={() => setDifficulty(diff.value)}
                 style={{
-                  padding: "10px 24px",
-                  background: difficulty === diff.value ? "var(--primary-blue)" : "var(--white)",
-                  color: difficulty === diff.value ? "var(--white)" : "var(--black)",
-                  border: "2px solid " + (difficulty === diff.value ? "var(--primary-blue)" : "var(--light-gray)"),
-                  borderRadius: 25,
+                  padding: "12px 20px",
+                  background: difficulty === diff.value ? "var(--primary-blue)" : "var(--light-gray)",
+                  color: difficulty === diff.value ? "var(--white)" : "var(--primary-blue)",
+                  border: "1px solid " + (difficulty === diff.value ? "var(--primary-blue)" : "var(--primary-blue)"),
+                  borderRadius: 30,
                   fontSize: "14px",
                   fontWeight: 600,
                   cursor: "pointer",
@@ -112,14 +112,16 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
                 }}
                 onMouseEnter={(e) => {
                   if (difficulty !== diff.value) {
-                    e.target.style.borderColor = "var(--primary-blue)";
-                    e.target.style.color = "var(--primary-blue)";
+                    e.target.style.background = "var(--dark-blue)";
+                    e.target.style.color = "var(--white)";
+                    e.target.style.borderColor = "var(--dark-blue)";
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (difficulty !== diff.value) {
-                    e.target.style.borderColor = "var(--light-gray)";
-                    e.target.style.color = "var(--black)";
+                    e.target.style.background = "var(--light-gray)";
+                    e.target.style.color = "var(--primary-blue)";
+                    e.target.style.borderColor = "var(--primary-blue)";
                   }
                 }}
               >
@@ -148,8 +150,8 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
               e.currentTarget.style.transform = "translateY(0)";
             }}
           >
-            <h3 style={{ fontSize: "22px", fontWeight: 700, color: "var(--primary-blue)", margin: "0 0 12px 0" }}>
-              🎮 Guess the Rating
+            <h3 style={{ fontSize: "22px", fontWeight: 700, color: "var(--black)", margin: "0 0 12px 0" }}>
+              Guess the Rating
             </h3>
             <p style={{ color: "var(--black)", lineHeight: "1.6", marginBottom: 20 }}>
               Read student reviews and guess the professor's average rating. Choose a mode and play!
@@ -197,7 +199,7 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
                     onMouseEnter={(e) => e.target.style.backgroundColor = "var(--light-gray)"}
                     onMouseLeave={(e) => e.target.style.backgroundColor = "transparent"}
                   >
-                    🎮 Arcade
+                    Arcade
                   </button>
                   <div style={{ height: 1, background: "var(--surface-border)" }} />
                   <button
@@ -214,7 +216,7 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
                     onMouseEnter={(e) => e.target.style.backgroundColor = "var(--light-gray)"}
                     onMouseLeave={(e) => e.target.style.backgroundColor = "transparent"}
                   >
-                    🏆 Best Out of 10
+                    Best Out of 10
                   </button>
                 </div>
               )}
@@ -239,8 +241,8 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
               e.currentTarget.style.transform = "translateY(0)";
             }}
           >
-            <h3 style={{ fontSize: "22px", fontWeight: 700, color: "var(--primary-blue)", margin: "0 0 12px 0" }}>
-              ⬆️ Higher or Lower
+            <h3 style={{ fontSize: "22px", fontWeight: 700, color: "var(--black)", margin: "0 0 12px 0" }}>
+              Higher or Lower
             </h3>
             <p style={{ color: "var(--black)", lineHeight: "1.6", marginBottom: 20 }}>
               Compare two professors and decide who has the higher rating. One wrong answer and it's game over!
@@ -306,7 +308,7 @@ export default function ModeSelect({ playerName, setMode, difficulty, setDifficu
               e.target.style.transform = "scale(1)";
             }}
           >
-            🏆 View Leaderboard
+            View Leaderboard
           </button>
         </div>
       </div>
