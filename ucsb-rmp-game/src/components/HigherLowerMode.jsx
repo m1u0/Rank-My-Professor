@@ -45,7 +45,7 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
           borderRadius: 0,
           marginBottom: 16
         }}>
-          <p style={{ margin: "0 0 4px 0", fontSize: "12px", color: "var(--black)" }}>Current Rating</p>
+          <p style={{ margin: "0 0 4px 0", fontSize: "12px", color: "var(--black)" }}>Rating</p>
           <p style={{ margin: 0, fontSize: "24px", fontWeight: 700, color: "var(--primary-blue)" }}>
             {prof.rating.toFixed(1)} ⭐
           </p>
@@ -144,7 +144,128 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
       </div>
     </div>
   );
+ const ProfessorCardRight = ({ prof, comments, position }) => (
+      <div style={{ flex: 1 }}>
+      <div style={{
+        background: "var(--white)",
+        borderRadius: 0,
+        padding: 24,
+        height: "100%",
+        display: "flex",
+        flexDirection: "column"
+      }}>
+        <h3 style={{ margin: "0 0 8px 0", fontSize: "20px", fontWeight: 700, color: "var(--black)" }}>
+          {prof.name}
+        </h3>
+        <p style={{ margin: "0 0 16px 0", fontSize: "13px", color: "var(--black)" }}>
+          {prof.department}
+        </p>
 
+        <div style={{
+          background: "var(--light-gray)",
+          padding: 12,
+          borderRadius: 0,
+          marginBottom: 16
+        }}>
+          <p style={{ margin: "0 0 4px 0", fontSize: "12px", color: "var(--black)" }}>Rating</p>
+          <p style={{ margin: 0, fontSize: "24px", fontWeight: 700, color: "var(--primary-blue)" }}>
+            ??⭐
+          </p>
+        </div>
+
+        <h4 style={{ margin: "0 0 12px 0", fontSize: "13px", fontWeight: 600, color: "var(--muted)" }}>
+          Recent Reviews:
+        </h4>
+
+        <div style={{ flex: 1, overflowY: "auto", paddingRight: 8 }}>
+          {comments.length > 0 ? (
+            comments.map((comment, i) => {
+              const getQualityColor = (rating) => {
+                if (rating >= 4.5) return "var(--green)";
+                if (rating >= 3) return "var(--yellow)";
+                return "var(--red)";
+              };
+              const getDifficultyColor = (rating) => {
+                if (rating >= 4) return "var(--red)";
+                if (rating >= 2) return "var(--yellow)";
+                return "var(--green)";
+              };
+              return (
+                <div
+                  key={i}
+                  style={{
+                    marginBottom: 16,
+                    padding: "16px",
+                    borderRadius: 0,
+                    background: "var(--light-gray)",
+                    border: "1px solid var(--surface-border)",
+                    display: "grid",
+                    gridTemplateColumns: "70px 1fr",
+                    gap: "16px",
+                    gridTemplateRows: "auto auto"
+                  }}
+                >
+                  {/* Left: Quality & Difficulty boxes */}
+                  <div style={{ gridRow: "1 / 3", display: "flex", flexDirection: "column", gap: 10 }}>
+                    {/* Quality box */}
+                    <div
+                      style={{
+                        background: getQualityColor(comment.clarityRating || 3),
+                        padding: "10px 6px",
+                        borderRadius: 0,
+                        textAlign: "center",
+                        minWidth: 60
+                      }}
+                    >
+                      <div style={{ fontSize: "9px", fontWeight: 600, color: "var(--black)", marginBottom: 3 }}>QUALITY</div>
+                      <div style={{ fontSize: "18px", fontWeight: 700, color: "var(--black)" }}>
+                        {comment.clarityRating || "N/A"}
+                      </div>
+                    </div>
+                    {/* Difficulty box */}
+                    <div
+                      style={{
+                        background: "var(--dark-gray)",
+                        padding: "10px 6px",
+                        borderRadius: 0,
+                        textAlign: "center",
+                        minWidth: 60
+                      }}
+                    >
+                      <div style={{ fontSize: "9px", fontWeight: 600, color: "var(--black)", marginBottom: 3 }}>DIFFICULTY</div>
+                      <div style={{ fontSize: "18px", fontWeight: 700, color: "var(--black)" }}>
+                        {comment.difficultyRating || "N/A"}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right top: Class name and metadata */}
+                  <div style={{ gridColumn: 2, gridRow: 1 }}>
+                    <div style={{ fontSize: "14px", fontWeight: 700, color: "var(--black)", marginBottom: 4 }}>
+                      {comment.class}
+                    </div>
+                    <div style={{ fontSize: "12px", color: "var(--muted)", lineHeight: "1.4" }}>
+                      {difficulty !== "hard" && <span>Grade: {comment.grade || "N/A"} &nbsp;&nbsp;</span>}
+                      Textbook: {comment.textbook || "N/A"}
+                    </div>
+                  </div>
+
+                  {/* Right middle: Comment text */}
+                  <div style={{ gridColumn: 2, gridRow: 2, marginTop: -8 }}>
+                    <p style={{ margin: 0, fontSize: "13px", color: "var(--black)", lineHeight: "1.5" }}>
+                      {comment.comment}
+                    </p>
+                  </div>
+                </div>
+              );
+            })
+          ) : (
+            <p style={{ color: "var(--muted-2)", fontSize: "13px" }}>No reviews available</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
   return (
     <div style={{ background: "var(--light-gray)", minHeight: "100vh", paddingBottom: 40, display: "flex", flexDirection: "column" }}>
       {/* Header */}
@@ -254,7 +375,7 @@ export default function HigherLowerMode({ leftProf, rightProf, onChoose, onExit,
             </button>
           </div>
 
-          <ProfessorCard prof={rightProf} comments={rightComments} position="right" />
+          <ProfessorCardRight prof={rightProf} comments={rightComments} position="right" />
         </div>
       </div>
     </div>
