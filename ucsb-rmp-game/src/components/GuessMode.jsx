@@ -9,7 +9,7 @@
 
 import React, { useState, useMemo, useEffect, useRef } from "react";
 
-export default function GuessMode({ prof, onGuess, onExit, score, difficulty, mode }) {
+export default function GuessMode({ prof, onGuess, onExit, score, mode }) {
   const [guess, setGuess] = useState(3.0);
   const [submitted, setSubmitted] = useState(false);
   const [fillPercentage, setFillPercentage] = useState(0);
@@ -33,7 +33,7 @@ export default function GuessMode({ prof, onGuess, onExit, score, difficulty, mo
       let currentFill = 0;
       const targetFill = (prof.rating / 5) * 100;
       const interval = setInterval(() => {
-        currentFill += (targetFill / 50); // 50 steps for smooth animation
+        currentFill += (targetFill / 27); // 50 steps for smooth animation
         if (currentFill >= targetFill) {
           currentFill = targetFill;
           clearInterval(interval);
