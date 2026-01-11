@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function ModeSelect({ playerName, setMode, onViewLeaderboard }) {
+export default function ModeSelect({ playerName, setMode, difficulty, setDifficulty, onViewLeaderboard }) {
   return (
     <div style={{ background: "#fafafa", minHeight: "100vh" }}>
       {/* Header */}
@@ -8,18 +8,56 @@ export default function ModeSelect({ playerName, setMode, onViewLeaderboard }) {
         background: "#000000ff",
         color: "#ffffff",
         padding: "10px 10px",
-        textAlign: "center",
-        position: "fixed",
-        top: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1000
+        textAlign: "center"
       }}>
         <h1 style={{ margin: 0, fontSize: "24px", fontWeight: 700 }}>Select Gamemode</h1>
       </div>
 
       {/* Content */}
-      <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 30px", paddingTop: 80 }}>
+      <div style={{ maxWidth: 1000, margin: "0 auto", padding: "40px 30px" }}>
+        {/* Difficulty Selector */}
+        <div style={{ marginBottom: 40, textAlign: "center" }}>
+          <h3 style={{ fontSize: "18px", fontWeight: 600, color: "#333333", marginBottom: 16 }}>
+            Select Difficulty
+          </h3>
+          <div style={{ display: "flex", justifyContent: "center", gap: 12 }}>
+            {[
+              { label: "Easy", value: "easy" },
+              { label: "Normal", value: "normal" },
+              { label: "Hard", value: "hard" }
+            ].map((diff) => (
+              <button
+                key={diff.value}
+                onClick={() => setDifficulty(diff.value)}
+                style={{
+                  padding: "10px 24px",
+                  background: difficulty === diff.value ? "#0066cc" : "#ffffff",
+                  color: difficulty === diff.value ? "#ffffff" : "#333333",
+                  border: "2px solid " + (difficulty === diff.value ? "#0066cc" : "#e0e0e0"),
+                  borderRadius: 25,
+                  fontSize: "14px",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  transition: "all 0.2s"
+                }}
+                onMouseEnter={(e) => {
+                  if (difficulty !== diff.value) {
+                    e.target.style.borderColor = "#0066cc";
+                    e.target.style.color = "#0066cc";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (difficulty !== diff.value) {
+                    e.target.style.borderColor = "#e0e0e0";
+                    e.target.style.color = "#333333";
+                  }
+                }}
+              >
+                {diff.label}
+              </button>
+            ))}
+          </div>
+        </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
           {/* Guess Mode Card */}
@@ -47,21 +85,22 @@ export default function ModeSelect({ playerName, setMode, onViewLeaderboard }) {
               Read student reviews and guess the professor's average rating. Get closer for more points!
             </p>
             <button
-              onClick={() => setMode("guess")}
+              onClick={() => difficulty && setMode("guess")}
+              disabled={!difficulty}
               style={{
                 width: "100%",
                 padding: "12px 20px",
-                background: "#0066cc",
+                background: difficulty ? "#0066cc" : "#cccccc",
                 color: "#ffffff",
                 border: "none",
                 borderRadius: 30,
                 fontSize: "16px",
                 fontWeight: 600,
-                cursor: "pointer",
+                cursor: difficulty ? "pointer" : "not-allowed",
                 transition: "background-color 0.2s"
               }}
-              onMouseEnter={(e) => e.target.style.backgroundColor = "#003399"}
-              onMouseLeave={(e) => e.target.style.backgroundColor = "#0066cc"}
+              onMouseEnter={(e) => difficulty && (e.target.style.backgroundColor = "#003399")}
+              onMouseLeave={(e) => difficulty && (e.target.style.backgroundColor = "#0066cc")}
             >
               Play Now
             </button>
@@ -92,21 +131,22 @@ export default function ModeSelect({ playerName, setMode, onViewLeaderboard }) {
               Compare two professors and decide who has the higher rating. One wrong answer and it's game over!
             </p>
             <button
-              onClick={() => setMode("higherlower")}
+              onClick={() => difficulty && setMode("higherlower")}
+              disabled={!difficulty}
               style={{
                 width: "100%",
                 padding: "12px 20px",
-                background: "#0066cc",
+                background: difficulty ? "#0066cc" : "#cccccc",
                 color: "#ffffff",
                 border: "none",
                 borderRadius: 30,
                 fontSize: "16px",
                 fontWeight: 600,
-                cursor: "pointer",
+                cursor: difficulty ? "pointer" : "not-allowed",
                 transition: "background-color 0.2s"
               }}
-              onMouseEnter={(e) => e.target.style.backgroundColor = "#003399"}
-              onMouseLeave={(e) => e.target.style.backgroundColor = "#0066cc"}
+              onMouseEnter={(e) => difficulty && (e.target.style.backgroundColor = "#003399")}
+              onMouseLeave={(e) => difficulty && (e.target.style.backgroundColor = "#0066cc")}
             >
               Play Now
             </button>

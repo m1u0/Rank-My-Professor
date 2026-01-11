@@ -12,6 +12,7 @@ export default function App() {
   const [playerName, setPlayerName] = useState("");
   const [started, setStarted] = useState(false);
   const [mode, setMode] = useState(null);
+  const [difficulty, setDifficulty] = useState(null);
   const [score, setScore] = useState(0);
   const [lost, setLost] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -120,6 +121,7 @@ export default function App() {
     if (confirmAction === "exit") {
       setLost(false);
       setMode(null);
+      setDifficulty(null);
     }
     setShowConfirm(false);
     setConfirmAction(null);
@@ -142,6 +144,7 @@ export default function App() {
     void submitScoreToLeaderboard(score);
     setScore(0);
     setLost(false);
+    setDifficulty(null);
     setMode(null);
     setViewingLeaderboard(false);
     setLeftProf(randomProf());
@@ -167,6 +170,8 @@ export default function App() {
   if (!mode) {
     return (
       <ModeSelect 
+        difficulty={difficulty}
+        setDifficulty={setDifficulty}
         playerName={playerName} 
         setMode={setMode}
         onViewLeaderboard={() => setViewingLeaderboard(true)}
